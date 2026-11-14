@@ -244,8 +244,13 @@ summary{padding:11px 0;min-height:44px}
 .pts{grid-template-columns:1fr}
 .ptc{min-height:44px}
 .ptc .pnm{white-space:normal;overflow:visible;text-overflow:clip}
+
+/*nav_post*/
+.here{display:none;margin-top:6px;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.here.on{display:block}
+.hback{display:block;width:100%;min-height:44px;margin:10px 0 0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
 </style></head><body>
-<header><div class="t">好走率ナビ</div><div class="s" id="date"></div><div class="tabs" id="tabs"></div><div id="dl" class="dl"></div></header>
+<header><div class="t">好走率ナビ</div><div class="s" id="date"></div><div class="tabs" id="tabs"></div><div class="here" id="here"></div><div id="dl" class="dl"></div></header>
 <main id="main"></main>
 <div class="sheet" id="sheet"><div class="sh" id="sh"></div></div>
 <script>
@@ -620,7 +625,7 @@ render();
 
 <script>
 const DL_BEFORE=1,DL_WIN=5;
-function jstNow(){const m=(location.hash||'').match(/now=(\d\d):(\d\d)/);const j=new Date(Date.now()+9*3600e3);const date=j.toISOString().slice(0,10);if(m)return {date:ALL[0].date,min:+m[1]*60+ +m[2],sec:0};return {date,min:j.getUTCHours()*60+j.getUTCMinutes(),sec:j.getUTCSeconds()}}
+function jstNow(){const m=(window.__H0||location.hash||'').match(/now=(\d\d):(\d\d)/);const j=new Date(Date.now()+9*3600e3);const date=j.toISOString().slice(0,10);if(m)return {date:ALL[0].date,min:+m[1]*60+ +m[2],sec:0};return {date,min:j.getUTCHours()*60+j.getUTCMinutes(),sec:j.getUTCSeconds()}}
 function dlList(){const n=jstNow(),out=[];for(const d of ALL){if(d.date!==n.date)continue;for(const r of d.races){if(!r.time)continue;const [h,mi]=r.time.split(':').map(Number);const close=h*60+mi-DL_BEFORE;const rem=(close*60)-(n.min*60+n.sec);if(rem>0&&rem<=DL_WIN*60)out.push({ba:d.ba,rno:r.rno,left:Math.ceil(rem/60),close:String(Math.floor(close/60)).padStart(2,'0')+':'+String(close%60).padStart(2,'0')})}}return out}
 function dlTag(ba,rno){return dlList().some(x=>x.ba===ba&&String(x.rno)===String(rno))?'<span class="dlt">まもなく締切</span>':''}
 let DL_KEY='';
@@ -652,5 +657,61 @@ window.addEventListener('hashchange',decorNext);setInterval(decorNext,15000);dec
   document.getElementById('date').textContent=(dt.getMonth()+1)+'/'+dt.getDate()+'（'+WD[dt.getDay()]+'）中央';
   document.querySelectorAll('#tabs button[data-ba]').forEach(b=>{const d=ALL.find(x=>x.ba===b.dataset.ba);const k=d.races.filter(r=>stars(marks(r).top)[0]>=4).length;b.innerHTML=b.dataset.ba+'<small class="tc">'+d.races.length+'R'+(k?'・★4以上'+k:'')+'</small>'})};
  tabs();})();
+</script>
+
+<script>
+// 画面の行き来（nav_post.py。2026-11-14）
+(function(){
+ const ID={'東京':'tokyo','京都':'kyoto','福島':'fukushima','中山':'nakayama','阪神':'hanshin','中京':'chukyo','新潟':'niigata','札幌':'sapporo','函館':'hakodate','小倉':'kokura'};
+ const BAOF={};for(const k in ID)BAOF[ID[k]]=k;
+ const h0=location.hash||'';if(/now=/.test(h0))window.__H0=h0;
+ const sheet=document.getElementById('sheet'),here=document.getElementById('here');
+ let SN=null,lastY=0,popping=false,pending=null;
+ const depth=st=>st.n?2:(st.RNO?1:0);
+ const cur=()=>({BA:BA,RNO:RNO||null,n:sheet.classList.contains('on')?SN:null});
+ const slug=st=>st.RNO==='help'?'help':(ID[st.BA]||'r')+(st.RNO?'-'+st.RNO:'');
+ const key=st=>st.BA+'|'+(st.RNO||'')+'|'+(st.n||'');
+ const hist=(fn,st)=>{try{history[fn](st,'','#'+slug(st))}catch(e){}};
+ const openSheet=n=>{try{const r=day().races.find(x=>String(x.rno)===String(RNO));const h=r&&r.horses.find(x=>String(x.no)===String(n));if(!h)return false;SN=String(n);document.getElementById('sh').innerHTML=card(h);sheet.classList.add('on');return true}catch(e){return false}};
+ // 今いる場所（下へ読んだときだけ、上の見出しに出す）
+ function hereUpd(){let t='';if(RNO&&RNO!=='help'){const r=day().races.find(x=>String(x.rno)===String(RNO));const ti=document.querySelector('main .rtitle');const hb=document.querySelector('header').getBoundingClientRect().bottom;
+   if(r&&ti&&ti.getBoundingClientRect().bottom<hb)t=BA+r.rno+'R　'+r.time+'発走　'+r.name}
+  if(here.textContent!==t)here.textContent=t;here.classList.toggle('on',!!t)}
+ addEventListener('scroll',hereUpd,{passive:true});
+ // 一覧：次のレースが見える位置へ
+ function toNext(){try{const n=jstNow();if(n.date!==ALL[0].date)return;const rs=day().races;const i=rs.findIndex(r=>{const p=r.time.split(':');return +p[0]*60+ +p[1]>=n.min});if(i<=0)return;
+   const el=document.querySelector('main .row[data-r="'+rs[i].rno+'"]');if(!el)return;const hb=document.querySelector('header').getBoundingClientRect().bottom;scrollTo(0,Math.max(0,el.getBoundingClientRect().top+scrollY-hb-8))}catch(e){}}
+ function decorate(keep){
+  if(RNO==='help'){document.querySelectorAll('#tabs [data-ba]').forEach(b=>b.classList.remove('on'));
+   const m=document.getElementById('main');if(m&&!m.querySelector('.hback')){const b=document.createElement('button');b.className='hback';b.dataset.back='1';b.textContent='‹ レース一覧に戻る';m.insertBefore(b,m.firstChild)}}
+  if(!keep&&!RNO)toNext();
+  hereUpd()}
+ // 履歴：深くなるときは足す、同じ深さは置きかえ、浅くなるときは戻る
+ function sync(){if(popping||pending)return;const st=cur(),hs=history.state;
+  if(hs&&hs.k===key(st))return;
+  const d=depth(st),hd=hs?hs.d:-1;const ns={BA:st.BA,RNO:st.RNO,n:st.n,d:d,k:key(st),y:0};
+  if(!hs){hist('replaceState',ns);return}
+  if(d>hd){const o=Object.assign({},hs,{y:lastY});hist('replaceState',o);ns.up=true;hist('pushState',ns)}
+  else if(d<hd&&hs.up&&d===hd-1){pending=ns;history.back()}
+  else{ns.up=hs.up&&d===hd;hist('replaceState',ns)}}
+ addEventListener('popstate',e=>{const st=pending||e.state;const wasPending=!!pending;pending=null;if(!st)return;popping=true;
+  try{
+   if(wasPending){hist('replaceState',Object.assign({},st,{up:!!(e.state&&e.state.up)}))}  // 画面はもう切り替わっている。履歴の中身だけ合わせる
+   else{sheet.classList.remove('on');if(ALL.some(d=>d.ba===st.BA))BA=st.BA;RNO=st.RNO||null;render(true);if(st.n)openSheet(st.n);else scrollTo(0,st.y||0)}
+  }catch(_){}popping=false;hereUpd()});
+ // 押した時点の位置と、開いた馬を覚える
+ document.addEventListener('click',e=>{lastY=scrollY;const t=e.target.closest&&e.target.closest('.tbl [data-n],.ptc[data-n],[data-n]');if(t&&t.dataset.n)SN=t.dataset.n},true);
+ new MutationObserver(()=>{setTimeout(sync,0)}).observe(sheet,{attributes:true,attributeFilter:['class']});
+ const _render=render;
+ render=function(keep){_render(keep);try{decorate(keep);sync()}catch(e){}};
+ // 着いたとき：URLに場所があればそこを開く
+ try{const m=(location.hash||'').match(/^#([a-z]+)(?:-(\d+))?$/);
+  if(m&&m[1]==='help'){RNO='help'}
+  else if(m&&BAOF[m[1]]&&ALL.some(d=>d.ba===BAOF[m[1]])){BA=BAOF[m[1]];RNO=(m[2]&&day().races.some(x=>String(x.rno)===m[2]))?m[2]:null}
+ }catch(e){}
+ try{history.scrollRestoration='manual'}catch(e){}  // 位置はこちらで戻す（ブラウザの自動の戻しとぶつかるため）
+ try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+ render();
+})();
 </script>
 </body></html>
