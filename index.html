@@ -280,9 +280,9 @@ summary{padding:11px 0;min-height:44px}
 .grd.g8{background:#c8102e}.grd.g7{background:#2f8f3a}.grd.g6{background:#5257d8}
 .rcg{border:2px solid #d4a017}.rcg .rtitle{font-size:23px}
 .rcg8{border-color:#c8102e}.rcg7{border-color:#2f8f3a}.rcg6{border-color:#5257d8}
-/* 会場のタブは名前だけ（レース数・★4以上の数は出さない。2026-11-15 本橋さん） */
-#tabs .tc{display:none}
-#tabs button{min-height:44px;font-size:15px}
+/* 会場のタブ：名前と、次のレース・発走時刻（中身は nav_post.py の tabNext。レース数・★4以上の数は出さない。2026-11-15 本橋さん） */
+#tabs .tc{display:block;font-size:12px;font-weight:700;opacity:.85;margin-top:1px}
+#tabs button{min-height:48px;font-size:15px}
 
 /*nav_post*/
 .here{display:none;margin-top:6px;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -766,9 +766,15 @@ const CFB={"阪神_ダ_1800":[36,15,2851,2471],"中京_ダ_1800":[34,14,2162,190
  // 一覧：次のレースが見える位置へ
  function toNext(){try{const n=jstNow();if(n.date!==ALL[0].date)return;const rs=day().races;const i=rs.findIndex(r=>{const p=r.time.split(':');return +p[0]*60+ +p[1]>=n.min});if(i<=0)return;
    const el=document.querySelector('main .row[data-r="'+rs[i].rno+'"]');if(!el)return;const hb=document.querySelector('header').getBoundingClientRect().bottom;scrollTo(0,Math.max(0,el.getBoundingClientRect().top+scrollY-hb-8))}catch(e){}}
+ // 会場のタブ：名前の下に、その会場の次のレースと発走時刻（JRAの表示と同じ形。2026-11-15 本橋さん）。全部終わったら「終了」
+ function tabNext(){try{const n=jstNow(),today=n.date===ALL[0].date;
+   document.querySelectorAll('#tabs [data-ba]').forEach(b=>{const d=ALL.find(x=>x.ba===b.dataset.ba);if(!d)return;let t=b.querySelector('.tc');if(!t){t=document.createElement('small');t.className='tc';b.appendChild(t)}
+    const r=today?d.races.find(r=>{const p=r.time.split(':');return +p[0]*60+ +p[1]>=n.min}):d.races[0];
+    t.textContent=r?r.rno+'R '+r.time:'終了'})}catch(e){}}
  function decorate(keep){
   if(RNO==='help'){document.querySelectorAll('#tabs [data-ba]').forEach(b=>b.classList.remove('on'));
    const m=document.getElementById('main');if(m&&!m.querySelector('.hback')){const b=document.createElement('button');b.className='hback';b.dataset.back='1';b.textContent='‹ レース一覧に戻る';m.insertBefore(b,m.firstChild)}}
+  tabNext();
   if(!keep&&!RNO)toNext();
   hereUpd()}
  // 履歴：深くなるときは足す、同じ深さは置きかえ、浅くなるときは戻る
