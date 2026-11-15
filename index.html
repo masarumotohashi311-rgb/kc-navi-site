@@ -290,6 +290,13 @@ summary{padding:11px 0;min-height:44px}
 #tabs button{min-height:48px;font-size:15px}
 
 
+.qv.qw{width:38px;margin:2px 0 1px 0}
+.tbl.haswk .th,.tbl.haswk .tr{grid-template-columns:40px 1fr 50px 100px!important}
+.tbl.haswk .tr{height:104px}
+.tbl.hasqv.haswk .tr{height:124px}
+@media (max-width:375px){.tbl.haswk .th,.tbl.haswk .tr{grid-template-columns:40px 1fr 42px 86px!important}}
+
+
 .bzl{background:var(--card);border-radius:14px;margin:8px 0;border:1px solid var(--line)}
 .bzl summary{list-style:none;cursor:pointer;min-height:44px;padding:8px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;font-size:14px;font-weight:800}
 .bzl summary::-webkit-details-marker{display:none}
@@ -585,7 +592,7 @@ function card(h){const d=day(),r=d.races.find(x=>String(x.rno)===String(RNO));co
  ${ck&&ck.g?`<div class="blk"><div class="ctl">調教（今回の追い切り）</div><div style="display:flex;align-items:center;margin-top:4px"><span class="g g${ck.g}">${ck.g}</span><div class="reason">${E((ck.rs||[]).join('、'))}</div></div></div>`:''}
  <details><summary>近5走</summary><table>${past||'<tr><td class="sub">記録なし</td></tr>'}</table></details>`}
 function helpView(){return `<div class="help"><h3>好走率ナビが生まれたわけ</h3>競馬でいちばん正確な指標は、人気（オッズ）です。たくさんの人の予想とお金が集まった数字で、過去のデータで確かめても、オッズから見込んだ3着以内の確率はよく当たります。<br><br>好走率ナビは、そのオッズを否定するのではなく、「オッズより正確に確率を出せないか」を、中央競馬の約26万頭（2021年1月〜2026年9月）のデータで研究してきました。その結果、オッズにも見落としやすいところがあると分かりました。たとえば、休み明けの人気馬、前走で圧勝した馬、追い切りの中身、前走の負け方、騎手や厩舎への人気の偏り、当日の馬体重などです。<br><br>その見落としを直したのが「直前好走率」です。作るのに使っていない期間（2025年7月〜2026年9月）で確かめると、オッズだけより3着以内をよく当てました。<b>好走率ナビは、オッズの間違い探しを見える化したものです。</b></div>
- <div class="help"><h3>画面の見方</h3><b>単勝</b>：今のオッズと人気。体重が発表されたら「468kg(+4)」と出ます。<br><b>直前好走率（バーの数字）</b>：オッズから見込んだ確率に、オッズが見落としやすい材料を足して直した、3着以内に来る確率です。<br><b>緑の↑＝オッズの見落とし</b>：オッズは「10回に3回」と見ているのに、ナビは「10回に4回」と見ている、というように、ナビの方が高く見ている馬（差が5%以上）。<br><b>赤の↓＝オッズが期待しすぎ</b>：ナビの方が5%以上低く見ている馬。<br><b>印なし＝オッズどおり</b>。<br><b>オッズでは○%（下の小さい数字）</b>：今のオッズから見込んだ、3着以内に来る確率です。矢印は、上の直前好走率がこの数字より5%以上高いと緑の↑、5%以上低いと赤の↓になります。オッズが出る前は出ません。<br><b>好走率</b>：前日に出した、オッズを使わない確率です。馬を押すと出ます。<br><b>軸</b>：3着以内に来る見込みがいちばん高い馬です。オッズが出る前は好走率の1位、出たあとは直前好走率の1位です。オッズが動くと、軸の馬が入れかわることがあります。多くのレースで1番人気と同じ馬になります。オッズの見落としを示す印ではありません。<br><b>レースの上の大きい数字と★</b>：軸の馬が3着以内に来る見込みです。オッズが出る前は好走率、出たあとは直前好走率で出します。オッズが動くと変わります。<br><b>出走表の並び</b>：人気の高い順です。オッズが出る前は、好走率の高い順に並びます。<br><b>脚質不安（グレーの札）</b>：芝のレースで追込と予想した馬のうち、ふつうなら緑の↑が付く馬です。この形の馬は過去、オッズの見込みとほぼ同じでした（3着以内33.1%、見込み31.4%。中央 2025年7月〜2026年9月、405頭）。そのため緑の↑は付けず、直前好走率も「オッズの見込み+2%」まで下げて出しています。芝で追込と予想した馬は、札がなくても、直前好走率を「オッズの見込み+2%」までにしています。<br><b>印の読み方</b>：最後の答えは、直前好走率の数字と矢印（緑の↑、赤の↓）です。紺とグレーの「有利・不利」は、予想するときの目安で、オッズにはもう入っています。同じ馬に「有利」と赤の↓が並ぶことがあります。有利だが、それ以上に人気が集まっている、という意味です。<br><b>札</b>：なぜずれているかの手がかりです（下の「札の意味」）。<br>馬を押すと、「オッズの見方 10回に○回」「ナビの見方 10回に○回」が並んで出ます。</div>
+ <div class="help"><h3>画面の見方</h3><b>単勝</b>：今のオッズと人気。体重が発表されたら「468kg(+4)」と出ます。<br><b>直前好走率（バーの数字）</b>：オッズから見込んだ確率に、オッズが見落としやすい材料を足して直した、3着以内に来る確率です。<br><b>緑の↑＝オッズの見落とし</b>：オッズは「10回に3回」と見ているのに、ナビは「10回に4回」と見ている、というように、ナビの方が高く見ている馬（差が5%以上）。<br><b>赤の↓＝オッズが期待しすぎ</b>：ナビの方が5%以上低く見ている馬。<br><b>印なし＝オッズどおり</b>。<br><b>オッズでは○%（下の小さい数字）</b>：今のオッズから見込んだ、3着以内に来る確率です。矢印は、上の直前好走率がこの数字より5%以上高いと緑の↑、5%以上低いと赤の↓になります。オッズが出る前は出ません。<br><b>好走率</b>：前日に出した、オッズを使わない確率です。馬を押すと出ます。<br><b>軸</b>：3着以内に来る見込みがいちばん高い馬です。オッズが出る前は好走率の1位、出たあとは直前好走率の1位です。オッズが動くと、軸の馬が入れかわることがあります。多くのレースで1番人気と同じ馬になります。オッズの見落としを示す印ではありません。<br><b>レースの上の大きい数字と★</b>：軸の馬が3着以内に来る見込みです。オッズが出る前は好走率、出たあとは直前好走率で出します。オッズが動くと変わります。<br><b>出走表の並び</b>：人気の高い順です。オッズが出る前は、好走率の高い順に並びます。<br><b>枠有利／枠不利</b>：枠の有利・不利がはっきりしているコースだけ、有利な側の枠（内枠＝1〜2枠、外枠＝7〜8枠）の馬に「枠有利」、反対側の馬に「枠不利」と出します（馬番の下と、馬を押したところ）。予想するときの目安です。過去は、有利な枠の馬はオッズの見込みより3着以内が約1%多く、不利な枠の馬は約1%少ない結果でした（1〜3番人気では約4%多い／約3%少ない。中央 2021年1月〜2026年9月）。<br><b>脚質不安（グレーの札）</b>：芝のレースで追込と予想した馬のうち、ふつうなら緑の↑が付く馬です。この形の馬は過去、オッズの見込みとほぼ同じでした（3着以内33.1%、見込み31.4%。中央 2025年7月〜2026年9月、405頭）。そのため緑の↑は付けず、直前好走率も「オッズの見込み+2%」まで下げて出しています。芝で追込と予想した馬は、札がなくても、直前好走率を「オッズの見込み+2%」までにしています。<br><b>印の読み方</b>：最後の答えは、直前好走率の数字と矢印（緑の↑、赤の↓）です。紺とグレーの「有利・不利」は、予想するときの目安で、オッズにはもう入っています。同じ馬に「有利」と赤の↓が並ぶことがあります。有利だが、それ以上に人気が集まっている、という意味です。<br><b>札</b>：なぜずれているかの手がかりです（下の「札の意味」）。<br>馬を押すと、「オッズの見方 10回に○回」「ナビの見方 10回に○回」が並んで出ます。</div>
  <div class="help"><h3>間違い探しのコツ（中央 2025年7月〜2026年9月の結果）</h3>1. <b>軸</b>は、★と、見込みがいちばん高い馬（オッズが出る前は好走率の1位、出たあとは直前好走率の1位）。★が多いほど、軸が3着以内に来る見込みが高いレースです。<br>2. <b>相手</b>は、緑の↑（オッズの見落とし）の馬を先に、あとは直前好走率の高い順（レースのページの「相手の探し方」）。過去は、人気順で選ぶより、当たる割合は同じくらいで、払戻の効率が高い形でした（相手3頭のワイドで回収率85.5%、人気順は81.9%）。★3以上の軸に、緑の↑（オッズの見落とし）の馬を組み合わせると、赤の↓の馬より3着以内に来ることが多く、ワイドの回収率も高い形でした（中央 2025年7月〜2026年9月、軸と相手1頭のワイド：緑↑ 95%／赤↓ 69%）。<br>3. オッズの見落とし（緑の↑）の馬は、オッズから見込まれるより3着以内に来ることが多い形でした（見込み34.1% → 実際40.1%）。それでも来ないことのほうが多く、買えば得という意味ではありません。未勝利戦で特にはっきりしていました。<br>4. 人気馬（1〜3番人気）に、オッズが期待しすぎ（赤の↓）と「休み明け」か「調教D」が重なったら、人気ほどは来ていない形でした（実際40.6%、見込み49.7%）。<br>5. ↑も↓もない馬は、オッズどおりと見ています（見込み14.5% → 実際14.4%）。<div class="sub">どの選び方も、回収率は100%を下回っています。好走率ナビは当たりや儲けを約束するものではありません。オッズの間違いがどこにありそうかを示すもので、選ぶのはご自身です。数字は最終オッズで確かめたもので、発走のだいぶ前のオッズで同じかは確かめているところです。</div></div>
  <div class="help"><h3>札の意味（中央 2022年1月〜2026年9月の結果）</h3>${['◉鉄板','◎軸馬','穴馬候補','大穴候補','人気先行'].map(f=>`<div style="margin:4px 0"><span class="fd ${FC[f]}">${f}</span>${FD[f]}</div>`).join('')}<div style="margin:8px 0 2px;font-weight:700">馬の札（緑＝オッズより来やすい形、赤＝来にくい形。中央 2021年1月〜2026年9月）</div>${Object.keys(TD).map(k=>`<div style="margin:4px 0"><span class="${k==='直前上昇'?'fd f-rise':k==='馬場が味方'?'fd f-bzp':k==='馬場で不利'?'fd f-bzm':'tg '+(TD[k][0]==='+'?(k==='調教A'?'tg-p tg-pl':'tg-p'):'tg-m')}">${k}</span>${E(TD[k][1])}。${E(TD[k][2])}。</div>`).join('')}<div class="sub">札は、3着以内に来やすいかどうかの目印です。買えば得という意味ではありません（どの札も回収率は100%を下回っています）。</div></div>
  <div class="help"><h3><span class="fd f-furi">前走不利</span>の札</h3>前走で、ほかの馬に斜行された、進路をふさがれた、出遅れた、つまずいた、などの不利があった馬です。JRA公式のレース結果「競走中の出来事等」に書かれている馬だけに付けています。そこに書かれない不利もあるので、札がない馬に不利がなかったとは限りません。<div class="sub">点線の札は、成績で確かめた札ではありません。好走率の数字にも入れていません。不利があった馬が次に巻き返すかは、結果を記録して確かめているところです。</div></div>
@@ -726,6 +733,25 @@ const CFB={"阪神_ダ_1800":[36,15,2851,2471],"中京_ダ_1800":[34,14,2162,190
    const i=s.lastIndexOf('<details');s=i>=0?s.slice(0,i)+blk+s.slice(i):s+blk}catch(e){}return s};
  const _rd=render;render=function(k){_rd(k);try{addSty()}catch(e){}};
  try{render(true)}catch(e){}
+})();
+</script>
+
+<script>
+/*waku_post*/
+(function(){
+ const WC=new Map();
+ const side=r=>{let v=WC.get(r);if(v===undefined){v='';try{if(r.course!=='障害'){const F=featData(r);v=F.waku||''}}catch(e){}WC.set(r,v)}return v};
+ function wakuAdv(r,h){const sd=side(r);if(!sd||!h.waku)return '';return sd==='内'?(h.waku<=2?'有利':h.waku>=7?'不利':''):(h.waku>=7?'有利':h.waku<=2?'不利':'')}
+ window.wakuAdv=wakuAdv;
+ function addWk(){if(!RNO||RNO==='help')return;const r=day().races.find(x=>String(x.rno)===String(RNO));if(!r||!side(r))return;
+  document.querySelectorAll('.tbl .tr[data-n]').forEach(e=>{const h=r.horses.find(x=>String(x.no)===e.dataset.n);if(!h||e.querySelector('.qw'))return;const v=wakuAdv(r,h);if(!v)return;const nn=e.querySelector('.nn');if(!nn)return;
+   let w=nn.parentNode;if(!w.classList.contains('q4w')){w=document.createElement('span');w.className='q4w';nn.parentNode.insertBefore(w,nn);w.appendChild(nn)}
+   const c=document.createElement('span');c.className='qv qw '+(v==='有利'?'qa':'qd');c.textContent='枠'+v;w.insertBefore(c,nn.nextSibling);const tb=e.closest('.tbl');if(tb)tb.classList.add('haswk')})}
+ const _card=card;card=function(h){let s=_card(h);try{const r=day().races.find(x=>String(x.rno)===String(RNO));const v=r&&wakuAdv(r,h);if(v){const sd=side(r),ba=r.ba||(ALL.find(d=>d.races.includes(r))||{}).ba,g=(typeof CG!=='undefined'&&CG[`${ba}_${r.course}_${parseInt(r.dist)}`])||null;
+    const num=(g&&g['枠内']!=null&&g['枠外']!=null&&g.waku===(sd==='内'?'内枠が有利':'外枠が有利'))?`　3着以内：1〜2枠 ${g['枠内']}%／7〜8枠 ${g['枠外']}%`:'';
+    const blk=`<div class="blk"><div class="ctl">枠（このコースの傾向）</div><div class="pw"><span class="pwv ${v==='有利'?'qa':'qd'}">枠 ${v}</span><span class="pwr">このコースは${sd==='内'?'内枠（1〜2枠）':'外枠（7〜8枠）'}が有利${num}</span></div></div>`;
+    const i=s.indexOf('<div class="blk"><div class="ctl">今日の位置の予想');const j=i>=0?i:s.lastIndexOf('<details');s=j>=0?s.slice(0,j)+blk+s.slice(j):s+blk}}catch(e){}return s};
+ const _rd=render;render=function(k){_rd(k);try{addWk()}catch(e){}};
 })();
 </script>
 
