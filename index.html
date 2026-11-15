@@ -258,6 +258,10 @@ main{padding-left:10px;padding-right:10px}
 .q4 .h{background:#e5e7eb;color:#4b5563}
 .q4 .p{color:#fff;font-weight:800}
 .q4 .p0{background:#b42318}.q4 .p1{background:#c2410c}.q4 .p2{background:#4b5563}.q4 .p3{background:#1f2a44}
+.qv{display:block;width:33px;margin:2px 0 0 1px;font-size:12px;line-height:16px;text-align:center;border-radius:3px;font-weight:800}
+.tbl.hasqv .tr{height:104px}
+.qv.qa{background:var(--ink);color:var(--card)}.qv.qd{border:1px solid var(--sub);color:var(--sub);line-height:14px}
+.pwv{display:inline-block;padding:1px 8px;border-radius:6px;font-size:13px;font-weight:800}.pwv.qa{background:var(--ink);color:var(--card)}.pwv.qd{border:1px solid var(--sub);color:var(--sub)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .q4 .h{background:#374151;color:#d1d5db}:root:not([data-theme="light"]) .q4 .n{color:#4b5563}:root:not([data-theme="light"]) .q4 .p3{background:#6b7fb5}}
 
 
@@ -572,7 +576,7 @@ function helpView(){return `<div class="help"><h3>好走率ナビが生まれた
  <div class="help"><h3>間違い探しのコツ（中央 2025年7月〜2026年9月の結果）</h3>1. <b>軸</b>は、★と、見込みがいちばん高い馬（オッズが出る前は好走率の1位、出たあとは直前好走率の1位）。★が多いほど、軸が3着以内に来る見込みが高いレースです。<br>2. <b>相手</b>は、緑の↑（オッズの見落とし）の馬を先に、あとは直前好走率の高い順（レースのページの「相手の探し方」）。過去は、人気順で選ぶより、当たる割合は同じくらいで、払戻の効率が高い形でした（相手3頭のワイドで回収率85.5%、人気順は81.9%）。★3以上の軸に、緑の↑（オッズの見落とし）の馬を組み合わせると、赤の↓の馬より3着以内に来ることが多く、ワイドの回収率も高い形でした（中央 2025年7月〜2026年9月、軸と相手1頭のワイド：緑↑ 95%／赤↓ 69%）。<br>3. オッズの見落とし（緑の↑）の馬は、オッズから見込まれるより3着以内に来ることが多い形でした（見込み34.1% → 実際40.1%）。それでも来ないことのほうが多く、買えば得という意味ではありません。未勝利戦で特にはっきりしていました。<br>4. 人気馬（1〜3番人気）に、オッズが期待しすぎ（赤の↓）と「休み明け」か「調教D」が重なったら、人気ほどは来ていない形でした（実際40.6%、見込み49.7%）。<br>5. ↑も↓もない馬は、オッズどおりと見ています（見込み14.5% → 実際14.4%）。<div class="sub">どの選び方も、回収率は100%を下回っています。好走率ナビは当たりや儲けを約束するものではありません。オッズの間違いがどこにありそうかを示すもので、選ぶのはご自身です。数字は最終オッズで確かめたもので、発走のだいぶ前のオッズで同じかは確かめているところです。</div></div>
  <div class="help"><h3>札の意味（中央 2022年1月〜2026年9月の結果）</h3>${['◉鉄板','◎軸馬','穴馬候補','大穴候補','人気先行'].map(f=>`<div style="margin:4px 0"><span class="fd ${FC[f]}">${f}</span>${FD[f]}</div>`).join('')}<div style="margin:8px 0 2px;font-weight:700">馬の札（緑＝オッズより来やすい形、赤＝来にくい形。中央 2021年1月〜2026年9月）</div>${Object.keys(TD).map(k=>`<div style="margin:4px 0"><span class="${k==='直前上昇'?'fd f-rise':k==='馬場が味方'?'fd f-bzp':k==='馬場で不利'?'fd f-bzm':'tg '+(TD[k][0]==='+'?(k==='調教A'?'tg-p tg-pl':'tg-p'):'tg-m')}">${k}</span>${E(TD[k][1])}。${E(TD[k][2])}。</div>`).join('')}<div class="sub">札は、3着以内に来やすいかどうかの目印です。買えば得という意味ではありません（どの札も回収率は100%を下回っています）。</div></div>
  <div class="help"><h3><span class="fd f-furi">前走不利</span>の札</h3>前走で、ほかの馬に斜行された、進路をふさがれた、出遅れた、つまずいた、などの不利があった馬です。JRA公式のレース結果「競走中の出来事等」に書かれている馬だけに付けています。そこに書かれない不利もあるので、札がない馬に不利がなかったとは限りません。<div class="sub">点線の札は、成績で確かめた札ではありません。好走率の数字にも入れていません。不利があった馬が次に巻き返すかは、結果を記録して確かめているところです。</div></div>
- <div class="help"><h3>展開の予想</h3>最初のコーナーの並びを予想して、逃げ・先行・差し・追込の4段に馬番を並べています。過去の走りの位置、騎手、前半の時計、距離の変化、同じレースに前へ行きたい馬が何頭いるか、などから計算しています。<br><b>逃げ</b>の段には、先頭で回る見込みが30%以上でいちばん高い馬を、見込みの数字と一緒に出します。いないときは「はっきりしない」と出ます。<br>図の上の「前に行きたい馬が少ない／多い」は、ふだん前で運ぶ馬の数です。<br><b>出走表の馬番の下の4マス</b>（上の段が逃・先、下の段が差・追）は、濃い色が今日の並びの予想、薄いグレーが最近5走で取ったことのある位置、枠だけが取っていない位置です。<br><b>図の下のコースの一言</b>（前がとくに有利／前が有利／差しも届く）は、そのコースで、最初のコーナーで前3分の1にいた馬と後ろ3分の1にいた馬の、3着以内の割合を比べたものです。どのコースも前にいた馬のほうが来ていて、その差が大きいコースを「前がとくに有利」、小さいコースを「差しも届く」としています（中央の平地 2021年1月〜2026年9月、72コース。レースが少ないコースは出しません）。前にいた馬かどうかは走ったあとに分かることなので、買い得かどうかとは別の話です。<br>馬を押すと、今日の位置の予想と、その理由（前走は先頭、この騎手のときは前、400m以上の距離の短縮や延長、など）が出ます。理由は、過去のレースで実際に位置が動いていた条件だけを出しています（中央の平地 2021年1月〜2026年9月）。<br>新馬戦など過去の成績がない馬と、障害レースは予想していません。<div class="sub">並びは予想で、外れることがあります。前（逃げ・先行）と予想した馬の約3頭に2頭が、実際に前のほうにいました（年ごとに、それより前の年だけで計算を作って確かめた結果。中央の平地 2023年〜2026年9月）。先頭の見込みが50%以上の馬は、実際に52.8%が先頭で回りました（2024年1月〜2026年9月）。<br>そのレースで前の馬と後ろの馬のどちらが来やすいかは、出していません。前に行く馬の数や、単騎で逃げられそうかどうかでは、オッズの見込みとの差が出なかったためです（中央の平地 2021年1月〜2026年9月）。図の下のコースの一言は、コースごとの過去の結果で、そのレースの予想ではありません。</div></div>
+ <div class="help"><h3>展開の予想</h3>最初のコーナーの並びを予想して、逃げ・先行・差し・追込の4段に馬番を並べています。過去の走りの位置、騎手、前半の時計、距離の変化、同じレースに前へ行きたい馬が何頭いるか、などから計算しています。<br><b>逃げ</b>の段には、先頭で回る見込みが30%以上でいちばん高い馬を、見込みの数字と一緒に出します。いないときは「はっきりしない」と出ます。<br>図の上の「前に行きたい馬が少ない／多い」は、ふだん前で運ぶ馬の数です。<br><b>出走表の馬番の下の4マス</b>（上の段が逃・先、下の段が差・追）は、濃い色が今日の並びの予想、薄いグレーが最近5走で取ったことのある位置、枠だけが取っていない位置です。<br><b>図の下のコースの一言</b>（前がとくに有利／前が有利／差しも届く）は、そのコースで、最初のコーナーで前3分の1にいた馬と後ろ3分の1にいた馬の、3着以内の割合を比べたものです。どのコースも前にいた馬のほうが来ていて、その差が大きいコースを「前がとくに有利」、小さいコースを「差しも届く」としています（中央の平地 2021年1月〜2026年9月、72コース。レースが少ないコースは出しません）。前にいた馬かどうかは走ったあとに分かることなので、買い得かどうかとは別の話です。<br><b>脚質 有利／不利</b>：「前がとくに有利」のコースだけ、逃げ・先行と予想した馬に「有利」、追込と予想した馬に「不利」と出します（4マスの下と、馬を押したところ）。このコースでは、前と予想した馬の3着以内は31.3%、後ろと予想した馬は10.9%でした（中央の平地 2023年〜2026年9月）。予想するときの目安で、オッズにはもう入っています。緑の↑や赤の↓とは別のものです。並びの予想が外れることもあります。<br>馬を押すと、今日の位置の予想と、その理由（前走は先頭、この騎手のときは前、400m以上の距離の短縮や延長、など）が出ます。理由は、過去のレースで実際に位置が動いていた条件だけを出しています（中央の平地 2021年1月〜2026年9月）。<br>新馬戦など過去の成績がない馬と、障害レースは予想していません。<div class="sub">並びは予想で、外れることがあります。前（逃げ・先行）と予想した馬の約3頭に2頭が、実際に前のほうにいました（年ごとに、それより前の年だけで計算を作って確かめた結果。中央の平地 2023年〜2026年9月）。先頭の見込みが50%以上の馬は、実際に52.8%が先頭で回りました（2024年1月〜2026年9月）。<br>前に行く馬の数や、単騎で逃げられそうかどうかで、そのレースだけの有利・不利を変えることはしていません。オッズの見込みとの差が出なかったためです（中央の平地 2021年1月〜2026年9月）。</div></div>
  <div class="help"><h3>直前上昇（緑の↑がいないレース）</h3>緑の↑の馬がいないレースだけ、直前好走率が好走率（前日）より上がった馬（上がり幅の大きい順に3頭まで）のうち、直前好走率がオッズの見込みより少し高い馬（1〜4%）を、札とバーの薄い緑で示しています（相手の探し方では▲）。オッズが変わると付いたり消えたりします。障害レースでは出しません。<div class="sub">過去（中央 2025年7月〜2026年9月、緑の↑がいないレース）では、この札の馬は3着以内に来る率が31.8%（オッズの見込み28.0%）、複勝の回収率は94.5%でした。100%は下回っています。</div></div>
  
  <div class="help"><h3>★の目安（中央の過去データ）</h3>★5 10回に9回／★4 10回に8〜9回／★3 10回に7〜8回／★2 10回に6〜7回／★1 10回に5回ほど／★なし 軸を決めにくいレース</div>`}
@@ -687,8 +691,10 @@ const CFB={"阪神_ダ_1800":[36,15,2851,2471],"中京_ダ_1800":[34,14,2162,190
   const L=['逃げ','先行','差し','追込'];
   const rows=L.map((t,i)=>`<div class="rw"><div class="lb l${i}">${t}</div><div class="cs">${i===0?(D.ld?nnb(D.ld.h)+`<small>先頭の見込み${Math.round(D.ld.p*100)}%</small>`:'<small>はっきりしない</small>'):(D.g[i].map(nnb).join('')||'<small>−</small>')}</div></div>`).join('');
   return (D.pace?`<div class="pcl">${D.pace}</div>`:'')+`<div class="pc4">${rows}</div>`+(D.no.length?`<div class="pcn">過去の成績がなく、予想できない馬：${D.no.map(nnb).join('')}</div>`:'')+crsLine(r)};
+ function crsLab(r){const c=CFB[baOf(r)+'_'+r.course+'_'+parseInt(r.dist)];if(!c)return '';const g=c[0]-c[1];return g>=25?'前がとくに有利':g<=16?'差しも届く':'前が有利'}
+ function styAdv(r,gi){return crsLab(r)!=='前がとくに有利'?'':gi<=1?'有利':gi===3?'不利':''}
  function crsLine(r){const c=CFB[baOf(r)+'_'+r.course+'_'+parseInt(r.dist)],a=CFB._all;if(!c)return '';
-  const g=c[0]-c[1],lab=g>=25?'前がとくに有利':g<=16?'差しも届く':'前が有利';
+  const lab=crsLab(r);
   return `<div class="pcc"><b>${baOf(r)}${r.course}${parseInt(r.dist)}m</b>　<b class="pcw">${lab}</b><small>3着以内：前にいた馬 ${c[0]}%／後ろにいた馬 ${c[1]}%</small></div>`}
  leadLine=function(){return ''};
  s4Chips=function(r,F){const D=paceData(r);return D.pace?`<span class="chp c-no">${D.pace}</span>`:''};
@@ -698,11 +704,12 @@ const CFB={"阪神_ダ_1800":[36,15,2851,2471],"中京_ダ_1800":[34,14,2162,190
   document.querySelectorAll('.tbl .tr[data-n]').forEach(e=>{const t=m[e.dataset.n],nn=e.querySelector('.nn');if(t==null||!nn||e.querySelector('.q4'))return;
    const hist=(POS[ba+'_'+r.rno+'_'+e.dataset.n]||[])[2]||'';
    const w=document.createElement('span');w.className='q4w';nn.parentNode.insertBefore(w,nn);w.appendChild(nn);
-   const q=document.createElement('span');q.className='q4';q.innerHTML=C.map((c,i)=>i===t?'<span class="p p'+i+'">'+c+'</span>':hist.indexOf(String(i))>=0?'<span class="h">'+c+'</span>':'<span class="n">'+c+'</span>').join('');w.appendChild(q)})}
+   const q=document.createElement('span');q.className='q4';q.innerHTML=C.map((c,i)=>i===t?'<span class="p p'+i+'">'+c+'</span>':hist.indexOf(String(i))>=0?'<span class="h">'+c+'</span>':'<span class="n">'+c+'</span>').join('');w.appendChild(q);
+   const v=styAdv(r,t);if(v){const e2=document.createElement('span');e2.className='qv '+(v==='有利'?'qa':'qd');e2.textContent=v;w.appendChild(e2);const tb=e.closest('.tbl');if(tb)tb.classList.add('hasqv')}})}
  const _card=card;card=function(h){let s=_card(h);try{const r=day().races.find(x=>String(x.rno)===String(RNO));if(!r)return s;const v=POS[baOf(r)+'_'+r.rno+'_'+h.no];if(!v)return s;
    const D=paceData(r),L=['逃げ','先行','差し','追込'];let gi=-1;D.g.forEach((g,i)=>{if(g.indexOf(h)>=0)gi=i});if(gi<0)return s;
    const w=v[3]||[],up=w.filter(x=>x[0]==='+').map(x=>x[1]),dn=w.filter(x=>x[0]==='-').map(x=>x[1]);
-   const blk=`<div class="blk"><div class="ctl">今日の位置の予想（最初のコーナー）</div><div class="pw"><span class="pwl p${gi}">${L[gi]}</span>${up.length?`<span class="pwr">前に行きやすい：${up.join('・')}</span>`:''}${dn.length?`<span class="pwr">前に行きにくい：${dn.join('・')}</span>`:''}</div></div>`;
+   const av=styAdv(r,gi);const blk=`<div class="blk"><div class="ctl">今日の位置の予想（最初のコーナー）</div><div class="pw"><span class="pwl p${gi}">${L[gi]}</span>${av?`<span class="pwv ${av==='有利'?'qa':'qd'}">脚質 ${av}</span><span class="pwr">このコースは前がとくに有利</span>`:''}${up.length?`<span class="pwr">前に行きやすい：${up.join('・')}</span>`:''}${dn.length?`<span class="pwr">前に行きにくい：${dn.join('・')}</span>`:''}</div></div>`;
    const i=s.lastIndexOf('<details');s=i>=0?s.slice(0,i)+blk+s.slice(i):s+blk}catch(e){}return s};
  const _rd=render;render=function(k){_rd(k);try{addSty()}catch(e){}};
  try{render(true)}catch(e){}
