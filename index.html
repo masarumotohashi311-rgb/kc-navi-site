@@ -789,10 +789,15 @@ const CFB={"阪神_ダ_1800":[36,15,2851,2471],"中京_ダ_1800":[34,14,2162,190
   try{
    if(wasPending){hist('replaceState',Object.assign({},st,{up:!!(e.state&&e.state.up)}))}  // 画面はもう切り替わっている。履歴の中身だけ合わせる
    else{sheet.classList.remove('on');if(ALL.some(d=>d.ba===st.BA))BA=st.BA;RNO=st.RNO||null;render(true);if(st.n)openSheet(st.n);else scrollTo(0,st.y||0)}
-  }catch(_){}popping=false;hereUpd()});
+  }catch(_){}popping=false;hereUpd();if(wasPending)setTimeout(sync,0)});  // 戻っている間に画面がさらに変わっていたら（タブ→次のレースなど）、履歴を合わせ直す
  // 押した時点の位置と、開いた馬を覚える
  document.addEventListener('click',e=>{lastY=scrollY;const t=e.target.closest&&e.target.closest('.tbl [data-n],.ptc[data-n],[data-n]');if(t&&t.dataset.n)SN=t.dataset.n},true);
  new MutationObserver(()=>{setTimeout(sync,0)}).observe(sheet,{attributes:true,attributeFilter:['class']});
+ // 会場のタブを押したら、その会場の次のレースを直接開く（開催日で、まだ終わっていないレースがあるとき。なければ一覧。2026-11-15 本橋さん）
+ let tabBa=null;  // 先にタブの会場を覚える（元の処理がタブを書きかえるので、あとからは押した場所をたどれない）
+ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('#tabs [data-ba]');tabBa=t?t.dataset.ba:null},true);
+ document.addEventListener('click',e=>{if(!tabBa)return;const ba=tabBa;tabBa=null;try{const n=jstNow(),d=ALL.find(x=>x.ba===ba);if(!d)return;
+   const r=n.date===ALL[0].date?d.races.find(r=>{const p=r.time.split(':');return +p[0]*60+ +p[1]>=n.min}):null;RNO=r?String(r.rno):null;render()}catch(_){}});
  const _render=render;
  render=function(keep){_render(keep);try{decorate(keep);sync()}catch(e){}};
  // 着いたとき：URLに場所があればそこを開く
