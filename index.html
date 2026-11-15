@@ -891,4 +891,18 @@ let BZOPEN=false;document.addEventListener('toggle',e=>{if(e.target.classList&&e
  render();
 })();
 </script>
+
+<script>
+(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261115042738';let neu=false,nv='';
+ // 読み直すときは、古い控えを避けるために ?v=新しい版 を付ける。同じ版でもう読み直していたら、自動では読み直さない（知らせだけ出す）
+ const go=()=>{location.replace(location.pathname+'?v='+nv+location.hash)};const tried=()=>new URLSearchParams(location.search).get('v')===nv;
+ const bar=()=>{if(document.getElementById('upd'))return;const b=document.createElement('button');b.id='upd';b.textContent='新しい内容があります。押すと更新します';
+  b.style.cssText='display:block;width:100%;min-height:44px;margin:6px 0 0;border:0;border-radius:10px;background:#1f2a44;color:#fff;font:inherit;font-size:14px;font-weight:800;cursor:pointer';
+  b.onclick=go;const h=document.querySelector('header');if(h)h.appendChild(b)};
+ const chk=async()=>{try{const r=await fetch('version.txt?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const v=(await r.text()).trim();if(v&&v!==BUILD){neu=true;nv=v;bar()}}catch(e){}};
+ setInterval(()=>{if(!document.hidden)chk()},180000);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)return;chk().then(()=>{if(neu&&!tried())go()})});
+ setTimeout(chk,20000);
+})();
+</script>
 </body></html>
