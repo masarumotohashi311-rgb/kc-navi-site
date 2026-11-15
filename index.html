@@ -432,7 +432,7 @@ function tagBlock(r,h){const T=tagsOf(r,h),top=marks(r).top,rz=noGreen(r,top)&&r
 let RES=null;// 今日の結果 {"東京_11":{"9":[着,人気,単勝,複勝]}}
 function resultView(r,top){const R0=RES&&RES[BA+'_'+r.rno];if(!R0)return '';const hs=live(r).filter(h=>R0[h.no]&&R0[h.no][0]);if(!hs.length)return '';
  const ng=noGreen(r,top),RL=ng?riseList(r,top):[];
- const mk=h=>{const t=todayP(r,h),e=oddsP(r,h),d=(t!=null&&e!=null)?(t-e)*100:0;return (h===top?'<span class="rx-ax">軸</span>':'')+(d>=5?'<span class="gup">↑</span>':d<=-5?'<span class="gdn">↓</span>':'')+(RL.indexOf(h)>=0?'<span class="fd f-rise">直前上昇</span>':'')};
+ const mk=h=>{const t=todayP(r,h),e=oddsP(r,h),d=(t!=null&&e!=null)?gapP(t,e):0;return (h===top?'<span class="rx-ax">軸</span>':'')+(d>=5?'<span class="gup">↑</span>':d<=-5?'<span class="gdn">↓</span>':'')+(RL.indexOf(h)>=0?'<span class="fd f-rise">直前上昇</span>':'')};
  const t3=hs.filter(h=>R0[h.no][0]<=3).sort((a,b)=>R0[a.no][0]-R0[b.no][0]);
  const oth=hs.filter(h=>R0[h.no][0]>3&&mk(h)).sort((a,b)=>R0[a.no][0]-R0[b.no][0]);
  return `<div class="rx"><div class="rx-h">このレースの結果</div>${t3.map(h=>{const o=R0[h.no];return `<div class="rx-r"><b class="rx-f ${o[0]===1?'f1':''}">${o[0]}着</b><span class="nn w${h.waku}">${h.no}</span><span class="rx-n">${E(h.name)}<span class="rx-m">${mk(h)}</span></span><span class="rx-p">${o[1]?o[1]+'番人気':''}<b>${o[0]===1&&o[2]?'単勝'+o[2]+'円・':''}${o[3]?'複勝'+o[3]+'円':''}</b></span></div>`}).join('')}
@@ -461,7 +461,7 @@ function todaySum(){if(!RES||!ODDS)return null;if(TDC&&TDC.res===RES&&TDC.odds==
  try{for(const d of ALL){BA=d.ba;for(const r of d.races){if(r.course==='障害')continue;const R0=RES[d.ba+'_'+r.rno];if(!R0)continue;RNO=String(r.rno);
   const hs=live(r).filter(h=>R0[h.no]&&R0[h.no][0]);if(!hs.length)continue;nr++;const top=marks(r).top,st=stars(top)[0],ng=noGreen(r,top),RL=ng?riseList(r,top):[];
   for(const h of hs){const f=R0[h.no][0],t=todayP(r,h),e=oddsP(r,h);const add=k=>{C[k][0]++;if(f<=3)C[k][1]++;C[k][2]+=(e||0)};
-   if(h===top&&st>=3)add('top');if(t!=null&&e!=null){const g=(t-e)*100;if(g>=5)add('up');else if(g<=-5)add('dn')}if(RL.indexOf(h)>=0)add('rise')}}}}
+   if(h===top&&st>=3)add('top');if(t!=null&&e!=null){const g=gapP(t,e);if(g>=5)add('up');else if(g<=-5)add('dn')}if(RL.indexOf(h)>=0)add('rise')}}}}
  catch(e){}finally{BA=sb;RNO=sr}
  const v=nr?{nr,C}:null;TDC={res:RES,odds:ODDS,v};return v}
 function todayBox(){const v=todaySum();if(!v)return '';const L=[['top','<i class="tdy-st">★</i>★3以上の軸'],['up','<i class="gup">↑</i>緑の↑'],['rise','<span class="fd f-rise">直前上昇</span>'],['dn','<i class="gdn">↓</i>赤の↓']];
@@ -498,8 +498,9 @@ function tpmCalc(TPM,key,odds,allOdds,wt,wtd,raceWts){const F=TPM.f[key];if(!F||
 if(typeof module!=='undefined')module.exports={tpmCalc,tpmTree,tpmWt};
 
 function oddsP(r,h){const n=odOf(h);if(!n||!TPM)return null;const al=[];for(const x of live(r)){const m=odOf(x);if(m&&m.odds)al.push(+m.odds)}if(al.length<5)return null;let S=0;for(const o of al)S+=1/o;const c=al.length,q=(1/n.odds)/S,lq=Math.log(q/(1-q)),ln=Math.log(c),k=TPM.k;return 1/(1+Math.exp(-(k[0]*lq+k[1]*ln+k[2]*lq*ln+k[3])))}
-function noGreen(r,top){let any=false;for(const x of live(r)){if(x===top)continue;const t=todayP(r,x),e=oddsP(r,x);if(t==null||e==null)continue;any=true;if((t-e)*100>=5)return false}return any}
-function riseList(r,top){if(r.course==='障害')return [];const a=[];for(const h of live(r)){if(h===top)continue;const t=todayP(r,h),e=oddsP(r,h);if(t==null||e==null||Math.abs((t-e)*100)>=5)continue;const d=Math.round(t*100)-pc(h.p);if(d>0)a.push([h,d,t,Math.round(t*100)-Math.round(e*100)])}return a.sort((x,y)=>(y[1]-x[1])||(y[2]-x[2])).slice(0,3).filter(x=>x[3]>=1).map(x=>x[0])}
+function gapP(t,e){return Math.round(t*100)-Math.round(e*100)}
+function noGreen(r,top){let any=false;for(const x of live(r)){if(x===top)continue;const t=todayP(r,x),e=oddsP(r,x);if(t==null||e==null)continue;any=true;if(gapP(t,e)>=5)return false}return any}
+function riseList(r,top){if(r.course==='障害')return [];const a=[];for(const h of live(r)){if(h===top)continue;const t=todayP(r,h),e=oddsP(r,h);if(t==null||e==null||Math.abs(gapP(t,e))>=5)continue;const d=Math.round(t*100)-pc(h.p);if(d>0)a.push([h,d,t,Math.round(t*100)-Math.round(e*100)])}return a.sort((x,y)=>(y[1]-x[1])||(y[2]-x[2])).slice(0,3).filter(x=>x[3]>=1).map(x=>x[0])}
 function todayP(r,h){const n=odOf(h);if(!n)return null;
  if(TPM){const al=[];for(const x of live(r)){const m=odOf(x);if(m&&m.odds)al.push(+m.odds)}if(al.length<5)return null;const W_=live(r).map(x=>wtOf(r,x));const w=wtOf(r,h);const v=tpmCalc(TPM,`${BA}_${r.rno}_${h.no}`,+n.odds,al,w[0],w[1],W_.map(z=>z[0]));if(v!=null)return v}
  let S=0,c=0;for(const x of live(r)){const m=odOf(x);if(m){S+=1/m.odds;c++}}
@@ -547,7 +548,7 @@ function tabs(){document.getElementById('date').textContent=ALL[0].date+'（中�
 function listView(){const d=day();return `<div class="sub" style="margin:6px 2px">★＝軸の信頼度（見込みがいちばん高い馬が、3着以内に来る見込み。オッズが出たあとは直前好走率）</div>`+d.races.map(r=>{const {top}=marks(r);const [n]=stars(top);return `<button class="row" data-r="${r.rno}">${typeof dlTag==="function"?dlTag(BA,r.rno):""}<div class="rn">${r.rno}R</div><div class="rbody"><div class="rt">${E(r.time)}　${E(r.course)}${E(r.dist)}m　${live(r).length}頭</div><div class="nm">${r.cls>=6?`<span class="grd gs g${r.cls}">${['G3','G2','G1'][r.cls-6]}</span>`:''}${E(r.name)}</div><div class="one">${typS(r)}</div><div class="sum">${raceSum(r)||'&nbsp;'}</div></div><div class="stars">${st(n)}</div></button>`}).join('')}
 const PT=[['ワイド',[54.7,85.5],[62.4,82.9],'3点','5点'],['馬連',[32.7,86.7],[42.7,82.6],'3点','5点'],['3連複',['19.0',87.6],[38.7,82.8],'3点','10点']];
 function partnerView(r,top){if(!top)return '';const hs=live(r).filter(h=>h!==top);const hasO=hs.some(h=>todayP(r,h)!=null);
- const L=hasO?hs.map(h=>{const t=todayP(r,h),e=oddsP(r,h);return {h,t:t==null?0:t,g:(t!=null&&e!=null)?t-e:0}}).sort((a,b)=>((b.g>=.05)-(a.g>=.05))||(b.t-a.t)):hs.map(h=>({h,t:h.p,g:0})).sort((a,b)=>b.t-a.t);
+ const L=hasO?hs.map(h=>{const t=todayP(r,h),e=oddsP(r,h);return {h,t:t==null?0:t,g:(t!=null&&e!=null)?gapP(t,e)/100:0}}).sort((a,b)=>((b.g>=.05)-(a.g>=.05))||(b.t-a.t)):hs.map(h=>({h,t:h.p,g:0})).sort((a,b)=>b.t-a.t);
  const T5=L.slice(0,5),RL=noGreen(r,top)?riseList(r,top):[];
  return `<details class="ptn"><summary>相手の探し方</summary>
  <div class="ptx">軸：<span class="nn w${top.waku}">${top.no}</span><b>${E(top.name)}</b>（好走率1位）</div>
@@ -565,7 +566,7 @@ function raceView(){const d=day(),r=d.races.find(x=>String(x.rno)===String(RNO))
  ${feat(r)}
  ${partnerView(r,top)}
  <div class="srtn">${hs.some(h=>odOf(h))?'人気順（'+odAt()+'のオッズ）':'好走率の高い順（オッズが出る前）'}</div>
- <div class="tbl"><div class="th"><span>番</span><span>馬名</span><span class="r">単勝</span><span class="r">${hs.some(h=>todayP(r,h)!=null)?'直前好走率':'好走率'}</span></div>${sorted(hs).map(h=>{const m=M[h.no],g=h.ck2&&h.ck2.g;return `<button class="tr" data-n="${h.no}"><span class="nn w${h.waku}">${h.no}</span><span class="tn">${E(h.name)}<span class="tj">${E(h.jockey)}${h.kin?'・'+(+h.kin).toFixed(1)+'kg':''}</span><span class="tb">${RL.indexOf(h)>=0?'<span class="fd f-rise">直前上昇</span>':''}${BZ[h.no]?`<span class="fd ${BZ[h.no]==='馬場が味方'?'f-bzp':'f-bzm'}">${BZ[h.no]}</span>`:''}${m?`<span class="fd ${FC[m]}">${m}</span>`:''}${furiOf(r,h)?'<span class="fd f-furi">前走不利</span>':''}${tagChips(r,h,(RL.indexOf(h)>=0?1:0)+(BZ[h.no]?1:0)+(m?1:0)+(furiOf(r,h)?1:0),(RL.indexOf(h)>=0?4:0)+(BZ[h.no]?5:0)+(m?m.length:0)+(furiOf(r,h)?4:0))}</span></span>${(o=>`<span class="tod">${o?`<b>${fmtOd(o.odds)}</b><small>${o.pop}番人気</small>`:''}${(w=>w[0]?`<small class="twt">${Math.round(w[0])}kg${w[1]==null?'':'('+(w[1]>0?'+'+w[1]:w[1]<0?'−'+(-w[1]):'±0')+')'}</small>`:'')(wtOf(r,h))}</span>`)(odOf(h))}<span class="tpx">${(()=>{const t=todayP(r,h),P0=pc(h.p),eo=oddsP(r,h);const T=t==null?null:Math.round(t*100),d=(t==null||eo==null)?0:(t-eo)*100,sh=t!=null&&eo!=null&&Math.abs(d)>=5,cl=d>0?'up':'dn';
+ <div class="tbl"><div class="th"><span>番</span><span>馬名</span><span class="r">単勝</span><span class="r">${hs.some(h=>todayP(r,h)!=null)?'直前好走率':'好走率'}</span></div>${sorted(hs).map(h=>{const m=M[h.no],g=h.ck2&&h.ck2.g;return `<button class="tr" data-n="${h.no}"><span class="nn w${h.waku}">${h.no}</span><span class="tn">${E(h.name)}<span class="tj">${E(h.jockey)}${h.kin?'・'+(+h.kin).toFixed(1)+'kg':''}</span><span class="tb">${RL.indexOf(h)>=0?'<span class="fd f-rise">直前上昇</span>':''}${BZ[h.no]?`<span class="fd ${BZ[h.no]==='馬場が味方'?'f-bzp':'f-bzm'}">${BZ[h.no]}</span>`:''}${m?`<span class="fd ${FC[m]}">${m}</span>`:''}${furiOf(r,h)?'<span class="fd f-furi">前走不利</span>':''}${tagChips(r,h,(RL.indexOf(h)>=0?1:0)+(BZ[h.no]?1:0)+(m?1:0)+(furiOf(r,h)?1:0),(RL.indexOf(h)>=0?4:0)+(BZ[h.no]?5:0)+(m?m.length:0)+(furiOf(r,h)?4:0))}</span></span>${(o=>`<span class="tod">${o?`<b>${fmtOd(o.odds)}</b><small>${o.pop}番人気</small>`:''}${(w=>w[0]?`<small class="twt">${Math.round(w[0])}kg${w[1]==null?'':'('+(w[1]>0?'+'+w[1]:w[1]<0?'−'+(-w[1]):'±0')+')'}</small>`:'')(wtOf(r,h))}</span>`)(odOf(h))}<span class="tpx">${(()=>{const t=todayP(r,h),P0=pc(h.p),eo=oddsP(r,h);const T=t==null?null:Math.round(t*100),d=(t==null||eo==null)?0:gapP(t,eo),sh=t!=null&&eo!=null&&Math.abs(d)>=5,cl=d>0?'up':'dn';
  const V=T==null?P0:T,rz=RL.indexOf(h)>=0;return `<span class="bar sw${rz?' rise':''}"><i style="width:${V}%"></i><b class="${sh?cl:''}">${sh?`<small class="ar">${d>0?'↑':'↓'}</small>`:''}${V}<small>%</small></b></span><em class="base">${T==null?'':(()=>{const o=oddsP(r,h);return o==null?`<small>好走率</small>${P0}<small>%</small>`:`<small>オッズでは</small>${Math.round(o*100)}<small>%</small>`})()}</em>`})()}</span></button>`}).join('')}</div>
  <div class="lg">馬を押すと、札と数字の説明が出ます。札の意味は「使い方」にあります。</div></div>${trendBox(r)}${todayBox()}`}
 function verdict(r,h,M){const up=[],dn=[];const g=h.ck2&&h.ck2.g,L=h.last||{},m=M[h.no];
@@ -895,7 +896,7 @@ let BZOPEN=false;document.addEventListener('toggle',e=>{if(e.target.classList&&e
 </script>
 
 <script>
-(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261115044034';let neu=false,nv='';
+(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261115074623';let neu=false,nv='';
  // 読み直すときは、古い控えを避けるために ?v=新しい版 を付ける。同じ版でもう読み直していたら、自動では読み直さない（知らせだけ出す）
  const go=()=>{location.replace(location.pathname+'?v='+nv+location.hash)};const tried=()=>new URLSearchParams(location.search).get('v')===nv;
  const bar=()=>{if(document.getElementById('upd'))return;const b=document.createElement('button');b.id='upd';b.textContent='新しい内容があります。押すと更新します';
