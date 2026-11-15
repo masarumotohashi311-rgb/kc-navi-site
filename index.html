@@ -750,6 +750,17 @@ let BZOPEN=false;document.addEventListener('toggle',e=>{if(e.target.classList&&e
     `<div class="trd-t">${nm}　脚質（並びの予想）<em class="${vs(v)[1]?'':'eq'}">${vs(v)[0]}</em></div><div class="trd-g">${['前','中団','後ろ'].map(k=>cell(v.S,k,v.sty===k)).join('')}</div>`).join('');
   return `<details class="bzl"${BZOPEN?' open':''}><summary>今日の${E(d.ba)}の馬場${A.map(([nm,v])=>`<small>${nm}　枠：<b class="${vd(v)[1]}">${vd(v)[0]}</b>　脚質：<b class="${vs(v)[1]}">${vs(v)[0]}</b></small>`).join('')}</summary><div class="bzb">${body}`+
    `<div class="bzn">終わったレースの3着以内の頭数です（見込み＝オッズから見込んだ頭数）。3レースたまったら判定します。内外は馬番、脚質は並びの予想で分けていて、実際に通った場所ではありません。レースが少ないうちは、たまたまの偏りも出ます。過去のデータでは、内外の偏りは同じ日の後のレースにも続きました。脚質の偏りは、芝では続かず、ダートでは少し続く程度でした（中央の平地 2023年〜2026年9月）。次の日にはほとんど続きません。</div></div></details>`}
+ const _bo=biasOf;biasOf=function(r){const v=_bo(r);if(!v||v.S2)return v;const d=day(),sr=RNO,S={前:[0,0],中団:[0,0],後ろ:[0,0]},dfr=[],dbk=[];
+  try{for(const x of d.races){if(+x.rno>=+r.rno||x.course!==r.course)continue;const R0=RES[d.ba+'_'+x.rno];if(!R0)continue;const hs=live(x).filter(h=>R0[h.no]&&R0[h.no][0]);if(hs.length<5)continue;RNO=String(x.rno);
+    let G=null;try{const D=paceData(x);if(D.n>=5){G={};D.g.forEach((g,i)=>g.forEach(h=>{G[h.no]=i<=1?'前':i===2?'中団':'後ろ'}))}}catch(e){}if(!G)continue;
+    for(const h of hs){const e=oddsP(x,h);if(e==null||!G[h.no])continue;const t3=R0[h.no][0]<=3?1:0;S[G[h.no]][0]+=t3;S[G[h.no]][1]+=e;if(G[h.no]==='前')dfr.push(t3-e);if(G[h.no]==='後ろ')dbk.push(t3-e)}}}catch(e){}finally{RNO=sr}
+  const mean=a=>a.reduce((s,q)=>s+q,0)/a.length;v.S=S;v.FB=(dfr.length>=4&&dbk.length>=4)?mean(dfr)-mean(dbk):null;const t2=r.course==='芝'?[-0.105,0.131]:[-0.111,0.105];
+  v.sty=(v.nr>=3&&v.FB!=null)?(v.FB>t2[1]?'前':v.FB<t2[0]?'後ろ':''):'';v.S2=true;return v};
+ const _tb=trendBox;trendBox=function(r){let s=_tb(r);try{const v=biasOf(r);if(!v||!s)return s;const i=s.indexOf('<div class="trd-t">脚質'),j=s.indexOf('<div class="trd-n">');if(i<0||j<0)return s;
+   const cell=(k,hi)=>`<div class="trd-c ${hi?'hi':''}"><b>${k}</b><span>${v.S[k][0]}頭</span><small>見込み${v.S[k][1].toFixed(1)}</small></div>`;
+   const vt=v.nr<3?'<em class="eq">前のレースが3つたまったら判定します</em>':v.sty?`<em>${v.sty}が来ている</em>`:'<em class="eq">目立った偏りなし</em>';
+   s=s.slice(0,i)+`<div class="trd-t">脚質（並びの予想）${vt}</div><div class="trd-g">${['前','中団','後ろ'].map(k=>cell(k,v.sty===k)).join('')}</div>`+s.slice(j);
+   s=s.replace('内外は馬番で見ていて、実際に通ったところではありません。','内外は馬番、脚質は並びの予想で見ていて、実際に通ったところではありません。脚質の偏りは、芝では後のレースに続かず、ダートでは少し続く程度でした（中央の平地 2023年〜2026年9月）。')}catch(e){}return s};
  const _lv=listView;listView=function(){let s=_lv();try{const d=day(),b=biasBox(d);if(!b)return s;const n=jstNow();let nx=null;if(n.date===ALL[0].date)nx=d.races.find(r=>{const p=r.time.split(':');return +p[0]*60+ +p[1]>=n.min});
    const key=nx?'<button class="row" data-r="'+nx.rno+'">':null;let i=key?s.indexOf(key):-1;if(i<0)i=s.indexOf('<button class="row"');return i<0?s+b:s.slice(0,i)+b+s.slice(i)}catch(e){return s}};
 })();
