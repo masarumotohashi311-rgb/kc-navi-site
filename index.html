@@ -293,7 +293,8 @@ summary{padding:11px 0;min-height:44px}
 .bzl{background:var(--card);border-radius:14px;margin:8px 0;border:1px solid var(--line)}
 .bzl summary{list-style:none;cursor:pointer;min-height:44px;padding:8px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;font-size:14px;font-weight:800}
 .bzl summary::-webkit-details-marker{display:none}
-.bzl summary small{font-size:13px;font-weight:700;color:var(--sub)}
+.bzl summary small{display:block;flex:1 0 100%;font-size:13px;font-weight:700;color:var(--sub)}
+.bzl summary{position:relative;padding-right:34px}.bzl summary:after{position:absolute;right:12px;top:14px}
 .bzl summary small b{color:var(--ink)}
 .bzl summary small b.on{color:#E8590C}
 .bzl summary:after{content:'▼';font-size:12px;color:var(--sub);margin-left:auto}
@@ -731,22 +732,24 @@ const CFB={"阪神_ダ_1800":[36,15,2851,2471],"中京_ダ_1800":[34,14,2162,190
 <script>
 let BZOPEN=false;document.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('bzl'))BZOPEN=e.target.open},true);
 (function(){
- function dayBias(d,tf){if(!RES)return null;const sb=BA,sr=RNO,W={内:[0,0],中:[0,0],外:[0,0]},S={前:[0,0],中団:[0,0],後ろ:[0,0]},din=[],dout=[];let nr=0;
+ function dayBias(d,tf){if(!RES)return null;const sb=BA,sr=RNO,W={内:[0,0],中:[0,0],外:[0,0]},S={前:[0,0],中団:[0,0],後ろ:[0,0]},din=[],dout=[],dfr=[],dbk=[];let nr=0;
   try{BA=d.ba;for(const x of d.races){if(x.course!==tf)continue;const R0=RES[d.ba+'_'+x.rno];if(!R0)continue;const hs=live(x).filter(h=>R0[h.no]&&R0[h.no][0]);if(hs.length<5)continue;RNO=String(x.rno);const n=hs.length;let ok=false;
     let G=null;try{const D=paceData(x);if(D.n>=5){G={};D.g.forEach((g,i)=>g.forEach(h=>{G[h.no]=i<=1?'前':i===2?'中団':'後ろ'}))}}catch(e){}
     for(const h of hs){const e=oddsP(x,h);if(e==null)continue;ok=true;const t3=R0[h.no][0]<=3?1:0,v=(h.no-1)/(n-1),p=v<1/3?'内':v<=2/3?'中':'外';W[p][0]+=t3;W[p][1]+=e;if(p==='内')din.push(t3-e);if(p==='外')dout.push(t3-e);
-     if(G&&G[h.no]){S[G[h.no]][0]+=t3;S[G[h.no]][1]+=e}}
+     if(G&&G[h.no]){S[G[h.no]][0]+=t3;S[G[h.no]][1]+=e;if(G[h.no]==='前')dfr.push(t3-e);if(G[h.no]==='後ろ')dbk.push(t3-e)}}
     if(ok)nr++}}catch(e){}finally{BA=sb;RNO=sr}
   if(!nr)return null;const mean=a=>a.reduce((s,v)=>s+v,0)/a.length;const IB=(din.length>=4&&dout.length>=4)?mean(din)-mean(dout):null;const th=tf==='芝'?[-0.109,0.121]:[-0.117,0.105];
-  return {nr,W,S,IB,side:(nr>=3&&IB!=null)?(IB>th[1]?'内':IB<th[0]?'外':''):''}}
+  const FB=(dfr.length>=4&&dbk.length>=4)?mean(dfr)-mean(dbk):null;const tf2=tf==='芝'?[-0.105,0.131]:[-0.111,0.105];
+  return {nr,W,S,IB,FB,side:(nr>=3&&IB!=null)?(IB>th[1]?'内':IB<th[0]?'外':''):'',sty:(nr>=3&&FB!=null)?(FB>tf2[1]?'前':FB<tf2[0]?'後ろ':''):''}}
  window.dayBias=dayBias;
  function biasBox(d){const A=[['芝','芝'],['ダ','ダート']].map(([tf,nm])=>[nm,dayBias(d,tf)]).filter(x=>x[1]);if(!A.length)return '';
   const vd=v=>v.nr<3?['まだ（'+v.nr+'レース）','']:v.side?[v.side+'が有利','on']:['偏りなし',''];
+  const vs=v=>v.nr<3?['まだ','']:v.sty?[v.sty+'が来ている','on']:['偏りなし',''];
   const cell=(O,k,hi)=>`<div class="trd-c ${hi?'hi':''}"><b>${k}</b><span>${O[k][0]}頭</span><small>見込み${O[k][1].toFixed(1)}</small></div>`;
   const body=A.map(([nm,v])=>`<div class="trd-t">${nm}（${v.nr}レース）　枠（馬番の位置）<em class="${vd(v)[1]?'':'eq'}">${vd(v)[0]}</em></div><div class="trd-g">${['内','中','外'].map(k=>cell(v.W,k,v.side===k)).join('')}</div>`+
-    `<div class="trd-t">${nm}　脚質（並びの予想）<em class="eq">参考</em></div><div class="trd-g">${['前','中団','後ろ'].map(k=>cell(v.S,k,false)).join('')}</div>`).join('');
-  return `<details class="bzl"${BZOPEN?' open':''}><summary>今日の${E(d.ba)}の馬場${A.map(([nm,v])=>`<small>${nm}：<b class="${vd(v)[1]}">${vd(v)[0]}</b></small>`).join('')}</summary><div class="bzb">${body}`+
-   `<div class="bzn">終わったレースの3着以内の頭数です（見込み＝オッズから見込んだ頭数）。3レースたまったら内外を判定します。内外は馬番、脚質は並びの予想で分けていて、実際に通った場所ではありません。レースが少ないうちは、たまたまの偏りも出ます。次の日にはほとんど続きません。</div></div></details>`}
+    `<div class="trd-t">${nm}　脚質（並びの予想）<em class="${vs(v)[1]?'':'eq'}">${vs(v)[0]}</em></div><div class="trd-g">${['前','中団','後ろ'].map(k=>cell(v.S,k,v.sty===k)).join('')}</div>`).join('');
+  return `<details class="bzl"${BZOPEN?' open':''}><summary>今日の${E(d.ba)}の馬場${A.map(([nm,v])=>`<small>${nm}　枠：<b class="${vd(v)[1]}">${vd(v)[0]}</b>　脚質：<b class="${vs(v)[1]}">${vs(v)[0]}</b></small>`).join('')}</summary><div class="bzb">${body}`+
+   `<div class="bzn">終わったレースの3着以内の頭数です（見込み＝オッズから見込んだ頭数）。3レースたまったら判定します。内外は馬番、脚質は並びの予想で分けていて、実際に通った場所ではありません。レースが少ないうちは、たまたまの偏りも出ます。過去のデータでは、内外の偏りは同じ日の後のレースにも続きました。脚質の偏りは、芝では続かず、ダートでは少し続く程度でした（中央の平地 2023年〜2026年9月）。次の日にはほとんど続きません。</div></div></details>`}
  const _lv=listView;listView=function(){let s=_lv();try{const d=day(),b=biasBox(d);if(!b)return s;const n=jstNow();let nx=null;if(n.date===ALL[0].date)nx=d.races.find(r=>{const p=r.time.split(':');return +p[0]*60+ +p[1]>=n.min});
    const key=nx?'<button class="row" data-r="'+nx.rno+'">':null;let i=key?s.indexOf(key):-1;if(i<0)i=s.indexOf('<button class="row"');return i<0?s+b:s.slice(0,i)+b+s.slice(i)}catch(e){return s}};
 })();
