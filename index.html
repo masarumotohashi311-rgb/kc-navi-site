@@ -707,7 +707,7 @@ const CFB={"阪神_ダ_1800":[36,15,2851,2471],"中京_ダ_1800":[34,14,2162,190
  function crsLine(r){const c=CFB[baOf(r)+'_'+r.course+'_'+parseInt(r.dist)],a=CFB._all;if(!c)return '';
   // どのコースも前にいた馬のほうが来ている。差（前−後ろ）が大きいコースを「前がとくに有利」、小さいコースを「差しも届く」と呼ぶ（72コースの上位・下位およそ4分の1。2026-11-15 本橋さん「前有利と言ったほうが分かりやすい」）
   const g=c[0]-c[1],lab=g>=25?'前がとくに有利':g<=16?'差しも届く':'前が有利';
-  return `<div class="pcc"><b>${baOf(r)}${r.course}${parseInt(r.dist)}m</b>　<b class="pcw">${lab}</b><small>3着以内：前にいた馬 ${c[0]}%／後ろにいた馬 ${c[1]}%（全コースの平均 ${a[0]}%／${a[1]}%）</small></div>`}
+  return `<div class="pcc"><b>${baOf(r)}${r.course}${parseInt(r.dist)}m</b>　<b class="pcw">${lab}</b><small>3着以内：前にいた馬 ${c[0]}%／後ろにいた馬 ${c[1]}%</small></div>`}
  leadLine=function(){return ''};
  s4Chips=function(r,F){const D=paceData(r);return D.pace?`<span class="chp c-no">${D.pace}</span>`:''};
  const _s4=s4Data;s4Data=function(r,F){const D=_s4(r,F);const j={};ST4.forEach(t=>{j[t]='並み'});return {by:D.by,j,c:D.c}};
