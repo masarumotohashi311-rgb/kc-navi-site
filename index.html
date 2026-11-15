@@ -716,6 +716,9 @@ const CFB={"阪神_ダ_1800":[36,15,2851,2471],"中京_ダ_1800":[34,14,2162,190
  function tp(h){const v=RO.get(h);if(!v)return null;const b=BA,n=RNO;try{BA=v[0];RNO=String(v[1].rno);return todayP(v[1],h)}catch(e){return null}finally{BA=b;RNO=n}}
  window.axisP=tp;
  const _st=stars;stars=function(h){if(!h)return _st(h);const t=tp(h);return t==null?_st(h):_st({p:t,ai:h.ai})};
+ const _mk=marks;marks=function(r){const o=_mk(r),t=o.top;if(t){const v=tp(t);if(v!=null){const c=o.M[t.no];o.M[t.no]=v>=.8?'◉鉄板':v>=.7?'◎軸馬':(c==='◉鉄板'||c==='◎軸馬'?'':c)}}return o};
+ FD['◉鉄板']='好走率1位の馬で、3着以内の見込みが80%以上（オッズが出たあとは直前好走率で見ます）。過去は3着以内86〜88%';
+ FD['◎軸馬']='好走率1位の馬で、3着以内の見込みが70〜80%（オッズが出たあとは直前好走率で見ます）。過去は3着以内74〜76%';
  const _cf=cfRing;cfRing=function(h,n){const t=tp(h);if(t==null)return _cf(h,n);return _cf(Object.assign({},h,{p:t}),n).replace('想定好走率（3着以内に来る見込み）','直前好走率（3着以内に来る見込み）')};
 })();
 </script>
