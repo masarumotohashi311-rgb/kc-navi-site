@@ -273,6 +273,13 @@ summary{padding:11px 0;min-height:44px}
 .pts{grid-template-columns:1fr}
 .ptc{min-height:44px}
 .ptc .pnm{white-space:normal;overflow:visible;text-overflow:clip}
+.rth{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rnb{font-size:22px;font-weight:800;color:var(--navy);line-height:1.2}
+.grd{display:inline-block;padding:1px 9px;margin-right:8px;border-radius:6px;color:#fff;font-weight:800;font-size:15px;vertical-align:3px;letter-spacing:.5px}
+.grd.gs{font-size:12px;padding:0 6px;margin-right:5px;vertical-align:1px}
+.grd.g8{background:#1c3f94}.grd.g7{background:#c8102e}.grd.g6{background:#1a8a3a}
+.rcg{border:2px solid #d4a017}.rcg .rtitle{font-size:23px}
+.rcg8{border-color:#1c3f94}.rcg7{border-color:#c8102e}.rcg6{border-color:#1a8a3a}
 /* 会場のタブは名前だけ（レース数・★4以上の数は出さない。2026-11-15 本橋さん） */
 #tabs .tc{display:none}
 #tabs button{min-height:44px;font-size:15px}
@@ -532,7 +539,7 @@ const st=n=>n?'★'.repeat(n)+`<span class="off">${'★'.repeat(5-n)}</span>`:'<
 
 function day(){return ALL.find(d=>d.ba===BA)}
 function tabs(){document.getElementById('date').textContent=ALL[0].date+'（中央）';document.getElementById('tabs').innerHTML=ALL.map(d=>`<button class="${d.ba===BA?'on':''}" data-ba="${d.ba}">${d.ba}</button>`).join('')+`<button class="${RNO==='help'?'on':''}" data-help="1">使い方</button>`}
-function listView(){const d=day();return `<div class="sub" style="margin:6px 2px">★＝軸の信頼度（好走率1位の馬が3着以内に来る見込み）</div>`+d.races.map(r=>{const {top}=marks(r);const [n]=stars(top);return `<button class="row" data-r="${r.rno}">${typeof dlTag==="function"?dlTag(BA,r.rno):""}<div class="rn">${r.rno}R</div><div class="rbody"><div class="rt">${E(r.time)}　${E(r.course)}${E(r.dist)}m　${live(r).length}頭</div><div class="nm">${E(r.name)}</div><div class="one">${typS(r)}</div><div class="sum">${raceSum(r)||'&nbsp;'}</div></div><div class="stars">${st(n)}</div></button>`}).join('')}
+function listView(){const d=day();return `<div class="sub" style="margin:6px 2px">★＝軸の信頼度（好走率1位の馬が3着以内に来る見込み）</div>`+d.races.map(r=>{const {top}=marks(r);const [n]=stars(top);return `<button class="row" data-r="${r.rno}">${typeof dlTag==="function"?dlTag(BA,r.rno):""}<div class="rn">${r.rno}R</div><div class="rbody"><div class="rt">${E(r.time)}　${E(r.course)}${E(r.dist)}m　${live(r).length}頭</div><div class="nm">${r.cls>=6?`<span class="grd gs g${r.cls}">${['G3','G2','G1'][r.cls-6]}</span>`:''}${E(r.name)}</div><div class="one">${typS(r)}</div><div class="sum">${raceSum(r)||'&nbsp;'}</div></div><div class="stars">${st(n)}</div></button>`}).join('')}
 // 相手の探し方：軸（好走率1位）を除き、緑の↑（直前好走率がオッズの見込みより5ポイント以上高い）を先に、あとは直前好走率の高い順。オッズ前は好走率の順
 // 過去の結果：ana2/partner.py（中央 2025年7月〜2026年9月、4,024レース、最終オッズ、100円ずつ軸1頭流し）
 const PT=[['ワイド',[53.1,84.1],[60.9,81.3],'3点','5点'],['馬連',[31.6,83.7],[40.8,78.3],'3点','5点'],['3連複',[18.8,89.6],[37.6,78.3],'3点','10点']];
@@ -550,7 +557,7 @@ function raceView(){const d=day(),r=d.races.find(x=>String(x.rno)===String(RNO))
  const rs=d.races,i=rs.indexOf(r),pv=rs[i-1],nx=rs[i+1];
  const chips=`<div class="rchips" id="rchips">${rs.map(x=>{const [sn]=stars(marks(x).top);return `<button class="${x===r?'on':''}" data-r="${x.rno}">${x.rno}R<small>${E(x.time)}</small>${sn>=4?'<i class="dot"></i>':''}</button>`}).join('')}</div>`;
  const nav=`<div class="rnav"><button ${pv?`data-r="${pv.rno}"`:'disabled'}>‹ ${pv?pv.rno+'R':''}</button><button data-back="1">レース一覧</button><button ${nx?`data-r="${nx.rno}"`:'disabled'}>${nx?nx.rno+'R':''} ›</button></div>`;
- return `${chips}${nav}<div class="rc"><div class="rt">${E(d.ba)}${r.rno}R　${E(r.time)}発走　${E(r.course)}${E(r.dist)}m　${hs.length}頭</div><div class="rtitle">${E(r.name)}</div>${resultView(r,top)}
+ return `${chips}${nav}<div class="rc${r.cls>=6?' rcg rcg'+r.cls:''}"><div class="rt rth"><b class="rnb">${E(d.ba)}${r.rno}R</b><span>${E(r.time)}発走　${E(r.course)}${E(r.dist)}m　${hs.length}頭</span></div><div class="rtitle">${r.cls>=6?`<span class="grd g${r.cls}">${['G3','G2','G1'][r.cls-6]}</span>`:''}${E(r.name)}</div>${resultView(r,top)}
  <div class="conf ${n===5?'s5':n===4?'s4':''}"><b>軸の信頼度</b>　<span class="stars">${st(n)}</span>${top?cfRing(top,n):''}</div>
  ${feat(r)}
  ${partnerView(r,top)}
