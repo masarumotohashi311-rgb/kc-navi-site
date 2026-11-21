@@ -314,6 +314,16 @@ summary{padding:11px 0;min-height:44px}
 .here{display:none;margin-top:6px;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .here.on{display:block}
 .hback{display:block;width:100%;min-height:44px;margin:10px 0 0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
+
+
+.mym{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;margin-right:5px;vertical-align:-5px;font-size:15px;font-weight:900;line-height:1;border:1.5px dashed #b8bec9;color:#b8bec9;background:#fff;cursor:pointer;flex:none;-webkit-tap-highlight-color:transparent}
+.mym:before{content:'印';font-size:10px;font-weight:700}
+.mym.on{border:2px solid #111827;color:#111827;background:#fff}
+.mym.on:before{content:none}
+.mym.on.x{color:#6b7280;border-color:#6b7280}
+.rx-my{padding:7px 10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.6;color:#111827}
+.rx-my b{font-weight:800}
+.rx-my .mk{display:inline-block;min-width:18px;font-weight:900}
 </style></head><body>
 <header><div class="t">好走率ナビ</div><div class="s" id="date"></div><div class="tabs" id="tabs"></div><div class="here" id="here"></div><div id="dl" class="dl"></div></header>
 <main id="main"></main>
@@ -594,7 +604,7 @@ function card(h){const d=day(),r=d.races.find(x=>String(x.rno)===String(RNO));co
  ${ck&&ck.g?`<div class="blk"><div class="ctl">調教（今回の追い切り）</div><div style="display:flex;align-items:center;margin-top:4px"><span class="g g${ck.g}">${ck.g}</span><div class="reason">${E((ck.rs||[]).join('、'))}</div></div></div>`:''}
  <details><summary>近5走</summary><table>${past||'<tr><td class="sub">記録なし</td></tr>'}</table></details>`}
 function helpView(){return `<div class="help"><h3>好走率ナビが生まれたわけ</h3>競馬でいちばん正確な指標は、人気（オッズ）です。たくさんの人の予想とお金が集まった数字で、過去のデータで確かめても、オッズから見込んだ3着以内の確率はよく当たります。<br><br>好走率ナビは、そのオッズを否定するのではなく、「オッズより正確に確率を出せないか」を、中央競馬の約26万頭（2021年1月〜2026年9月）のデータで研究してきました。その結果、オッズにも見落としやすいところがあると分かりました。たとえば、休み明けの人気馬、前走で圧勝した馬、追い切りの中身、前走の負け方、騎手や厩舎への人気の偏り、当日の馬体重などです。<br><br>その見落としを直したのが「直前好走率」です。作るのに使っていない期間（2025年7月〜2026年9月）で確かめると、オッズだけより3着以内をよく当てました。<b>好走率ナビは、オッズの間違い探しを見える化したものです。</b></div>
- <div class="help"><h3>画面の見方</h3><b>単勝</b>：今のオッズと人気。体重が発表されたら「468kg(+4)」と出ます。<br><b>直前好走率（バーの数字）</b>：オッズから見込んだ確率に、オッズが見落としやすい材料を足して直した、3着以内に来る確率です。<br><b>緑の↑＝オッズの見落とし</b>：オッズは「10回に3回」と見ているのに、ナビは「10回に4回」と見ている、というように、ナビの方が高く見ている馬（差が5%以上）。<br><b>赤の↓＝オッズが期待しすぎ</b>：ナビの方が5%以上低く見ている馬。<br><b>印なし＝オッズどおり</b>。<br><b>オッズでは○%（下の小さい数字）</b>：今のオッズから見込んだ、3着以内に来る確率です。矢印は、上の直前好走率がこの数字より5%以上高いと緑の↑、5%以上低いと赤の↓になります。オッズが出る前は出ません。<br><b>好走率</b>：前日に出した、オッズを使わない確率です。馬を押すと出ます。<br><b>軸</b>：3着以内に来る見込みがいちばん高い馬です。オッズが出る前は好走率の1位、出たあとは直前好走率の1位です。オッズが動くと、軸の馬が入れかわることがあります。多くのレースで1番人気と同じ馬になります。オッズの見落としを示す印ではありません。<br><b>レースの上の大きい数字と★</b>：軸の馬が3着以内に来る見込みです。オッズが出る前は好走率、出たあとは直前好走率で出します。オッズが動くと変わります。<br><b>出走表の並び</b>：人気の高い順です。オッズが出る前は、好走率の高い順に並びます。<br><b>枠有利／枠不利</b>：枠の有利・不利がはっきりしているコースだけ、有利な側の枠（内枠＝1〜2枠、外枠＝7〜8枠）の馬に「枠有利」、反対側の馬に「枠不利」と出します（馬番の下と、馬を押したところ）。8頭以下のレースは、馬番の内側3分の1・外側3分の1で見ます。予想するときの目安です。過去は、有利な枠の馬はオッズの見込みより3着以内が約1%多く、不利な枠の馬は約1%少ない結果でした（1〜3番人気では約4%多い／約3%少ない。中央 2021年1月〜2026年9月）。<br><b>脚質不安（グレーの札）</b>：芝のレースで追込と予想した馬のうち、ふつうなら緑の↑が付く馬です。この形の馬は過去、オッズの見込みとほぼ同じでした（3着以内33.1%、見込み31.4%。中央 2025年7月〜2026年9月、405頭）。そのため緑の↑は付けず、直前好走率も「オッズの見込み+2%」まで下げて出しています。芝で追込と予想した馬は、札がなくても、直前好走率を「オッズの見込み+2%」までにしています。<br><b>印の読み方</b>：最後の答えは、直前好走率の数字と矢印（緑の↑、赤の↓）です。馬番の下の四角い「有利」（緑）「不利」（赤）は、コースと枠・脚質から見た予想の目安です。同じ馬に「有利」と赤の↓、「不利」と緑の↑が並ぶことがあります。「有利だが、それ以上に人気が集まっている」「不利だが、それでもオッズの見込みよりは高い」という意味です。<br><b>札</b>：なぜずれているかの手がかりです（下の「札の意味」）。<br>馬を押すと、「オッズの見方 10回に○回」「ナビの見方 10回に○回」が並んで出ます。</div>
+ <div class="help"><h3>画面の見方</h3><b>単勝</b>：今のオッズと人気。体重が発表されたら「468kg(+4)」と出ます。<br><b>直前好走率（バーの数字）</b>：オッズから見込んだ確率に、オッズが見落としやすい材料を足して直した、3着以内に来る確率です。<br><b>緑の↑＝オッズの見落とし</b>：オッズは「10回に3回」と見ているのに、ナビは「10回に4回」と見ている、というように、ナビの方が高く見ている馬（差が5%以上）。<br><b>赤の↓＝オッズが期待しすぎ</b>：ナビの方が5%以上低く見ている馬。<br><b>印なし＝オッズどおり</b>。<br><b>オッズでは○%（下の小さい数字）</b>：今のオッズから見込んだ、3着以内に来る確率です。矢印は、上の直前好走率がこの数字より5%以上高いと緑の↑、5%以上低いと赤の↓になります。オッズが出る前は出ません。<br><b>好走率</b>：前日に出した、オッズを使わない確率です。馬を押すと出ます。<br><b>軸</b>：3着以内に来る見込みがいちばん高い馬です。オッズが出る前は好走率の1位、出たあとは直前好走率の1位です。オッズが動くと、軸の馬が入れかわることがあります。多くのレースで1番人気と同じ馬になります。オッズの見落としを示す印ではありません。<br><b>レースの上の大きい数字と★</b>：軸の馬が3着以内に来る見込みです。オッズが出る前は好走率、出たあとは直前好走率で出します。オッズが動くと変わります。<br><b>出走表の並び</b>：人気の高い順です。オッズが出る前は、好走率の高い順に並びます。<br><b>枠有利／枠不利</b>：枠の有利・不利がはっきりしているコースだけ、有利な側の枠（内枠＝1〜2枠、外枠＝7〜8枠）の馬に「枠有利」、反対側の馬に「枠不利」と出します（馬番の下と、馬を押したところ）。8頭以下のレースは、馬番の内側3分の1・外側3分の1で見ます。予想するときの目安です。過去は、有利な枠の馬はオッズの見込みより3着以内が約1%多く、不利な枠の馬は約1%少ない結果でした（1〜3番人気では約4%多い／約3%少ない。中央 2021年1月〜2026年9月）。<br><b>脚質不安（グレーの札）</b>：芝のレースで追込と予想した馬のうち、ふつうなら緑の↑が付く馬です。この形の馬は過去、オッズの見込みとほぼ同じでした（3着以内33.1%、見込み31.4%。中央 2025年7月〜2026年9月、405頭）。そのため緑の↑は付けず、直前好走率も「オッズの見込み+2%」まで下げて出しています。芝で追込と予想した馬は、札がなくても、直前好走率を「オッズの見込み+2%」までにしています。<br><b>自分の印</b>：出走表の馬名の前の丸を押すと、◎→○→▲→△→✕→なし の順に、自分用の印を付けられます。印はこの端末の中だけに保存され、ほかの人には見えません（機種やブラウザを変えると消えます）。レースが終わると、「このレースの結果」に自分の印の馬の着順が出ます。<br><br><b>印の読み方</b>：最後の答えは、直前好走率の数字と矢印（緑の↑、赤の↓）です。馬番の下の四角い「有利」（緑）「不利」（赤）は、コースと枠・脚質から見た予想の目安です。同じ馬に「有利」と赤の↓、「不利」と緑の↑が並ぶことがあります。「有利だが、それ以上に人気が集まっている」「不利だが、それでもオッズの見込みよりは高い」という意味です。<br><b>札</b>：なぜずれているかの手がかりです（下の「札の意味」）。<br>馬を押すと、「オッズの見方 10回に○回」「ナビの見方 10回に○回」が並んで出ます。</div>
  <div class="help"><h3>間違い探しのコツ（中央 2025年7月〜2026年9月の結果）</h3>1. <b>軸</b>は、★と、見込みがいちばん高い馬（オッズが出る前は好走率の1位、出たあとは直前好走率の1位）。★が多いほど、軸が3着以内に来る見込みが高いレースです。<br>2. <b>相手</b>は、緑の↑（オッズの見落とし）の馬を先に、あとは直前好走率の高い順（レースのページの「相手の探し方」）。過去は、人気順で選ぶより、当たる割合は同じくらいで、払戻の効率が高い形でした（相手3頭のワイドで回収率85.5%、人気順は81.9%）。★3以上の軸に、緑の↑（オッズの見落とし）の馬を組み合わせると、赤の↓の馬より3着以内に来ることが多く、ワイドの回収率も高い形でした（中央 2025年7月〜2026年9月、軸と相手1頭のワイド：緑↑ 95%／赤↓ 69%）。<br>3. オッズの見落とし（緑の↑）の馬は、オッズから見込まれるより3着以内に来ることが多い形でした（見込み34.1% → 実際40.1%）。それでも来ないことのほうが多く、買えば得という意味ではありません。未勝利戦で特にはっきりしていました。<br>4. 人気馬（1〜3番人気）に、オッズが期待しすぎ（赤の↓）と「休み明け」か「調教D」が重なったら、人気ほどは来ていない形でした（実際40.6%、見込み49.7%）。<br>5. ↑も↓もない馬は、オッズどおりと見ています（見込み14.5% → 実際14.4%）。<div class="sub">どの選び方も、回収率は100%を下回っています。好走率ナビは当たりや儲けを約束するものではありません。オッズの間違いがどこにありそうかを示すもので、選ぶのはご自身です。数字は最終オッズで確かめたもので、発走のだいぶ前のオッズで同じかは確かめているところです。</div></div>
  <div class="help"><h3>札の意味（中央 2022年1月〜2026年9月の結果）</h3>${['◉鉄板','◎軸馬','穴馬候補','大穴候補','人気先行'].map(f=>`<div style="margin:4px 0"><span class="fd ${FC[f]}">${f}</span>${FD[f]}</div>`).join('')}<div style="margin:8px 0 2px;font-weight:700">馬の札（緑＝オッズより来やすい形、赤＝来にくい形。中央 2021年1月〜2026年9月）</div>${Object.keys(TD).map(k=>`<div style="margin:4px 0"><span class="${k==='直前上昇'?'fd f-rise':k==='馬場が味方'?'fd f-bzp':k==='馬場で不利'?'fd f-bzm':'tg '+(TD[k][0]==='+'?(k==='調教A'?'tg-p tg-pl':'tg-p'):'tg-m')}">${k}</span>${E(TD[k][1])}。${E(TD[k][2])}。</div>`).join('')}<div class="sub">札は、3着以内に来やすいかどうかの目印です。買えば得という意味ではありません（どの札も回収率は100%を下回っています）。</div></div>
  <div class="help"><h3><span class="fd f-furi">前走不利</span>の札</h3>前走で、ほかの馬に斜行された、進路をふさがれた、出遅れた、つまずいた、などの不利があった馬です。JRA公式のレース結果「競走中の出来事等」に書かれている馬だけに付けています。そこに書かれない不利もあるので、札がない馬に不利がなかったとは限りません。<div class="sub">点線の札は、成績で確かめた札ではありません。好走率の数字にも入れていません。不利があった馬が次に巻き返すかは、結果を記録して確かめているところです。</div></div>
@@ -896,7 +906,41 @@ let BZOPEN=false;document.addEventListener('toggle',e=>{if(e.target.classList&&e
 </script>
 
 <script>
-(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261121004128';let neu=false,nv='';
+/*mymark_post*/
+(function(){
+ const KEY='kcnavi_mymark',SEQ=['','◎','○','▲','△','✕'];
+ const D=(ALL[0]&&ALL[0].date)||'';
+ function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return {}}}
+ function save(o){try{const ks=Object.keys(o).sort();while(ks.length>14){delete o[ks.shift()]}localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+ function rk(){const r=day().races.find(x=>String(x.rno)===String(RNO));const ba=r&&(r.ba||(ALL.find(d=>d.races.includes(r))||{}).ba);return r?{r,k:ba+'_'+r.rno}:null}
+ function get(k,no){const o=load();return ((o[D]||{})[k]||{})[no]||''}
+ function set(k,no,v){const o=load();o[D]=o[D]||{};o[D][k]=o[D][k]||{};if(v)o[D][k][no]=v;else delete o[D][k][no];save(o)}
+ function paint(el,v){el.textContent=v;el.classList.toggle('on',!!v);el.classList.toggle('x',v==='✕');el.setAttribute('aria-label',v?'自分の印 '+v:'自分の印をつける')}
+ function addChips(){if(!RNO||RNO==='help')return;const c=rk();if(!c)return;
+  document.querySelectorAll('.tbl .tr[data-n]').forEach(e=>{const tn=e.querySelector('.tn');if(!tn||tn.querySelector('.mym'))return;
+   const no=e.dataset.n,m=document.createElement('span');m.className='mym';m.setAttribute('role','button');paint(m,get(c.k,no));
+   const stop=ev=>{ev.stopPropagation();ev.preventDefault()};
+   m.addEventListener('pointerdown',ev=>ev.stopPropagation());
+   m.addEventListener('click',ev=>{stop(ev);const v=SEQ[(SEQ.indexOf(get(c.k,no))+1)%SEQ.length];set(c.k,no,v);paint(m,v);addRes()},true);
+   tn.insertBefore(m,tn.firstChild)})}
+ function addRes(){if(!RNO||RNO==='help')return;const c=rk();if(!c)return;
+  const h=[...document.querySelectorAll('.rx-h')][0];if(!h)return;const box=h.parentElement;let line=box.querySelector('.rx-my');
+  const o=(load()[D]||{})[c.k]||{};const nos=Object.keys(o).filter(n=>o[n]&&o[n]!=='✕').sort((a,b)=>SEQ.indexOf(o[a])-SEQ.indexOf(o[b])||a-b);
+  if(!nos.length){if(line)line.remove();return}
+  const R=(typeof window.__kcRes==='function')?window.__kcRes(c.r):null;
+  const fin=no=>{const t=[...box.querySelectorAll('.rx-r')].find(x=>{const n=x.querySelector('.nn');return n&&n.textContent.trim()===String(no)});if(t)return (t.querySelector('.rx-f')||{}).textContent||'';const m=box.textContent.match(new RegExp('(^|[^0-9])'+no+'番\\s*([0-9]+)着'));return m?m[2]+'着':''};
+  const html='<b>自分の印</b>：'+nos.map(n=>`<span class="mk">${o[n]}</span>${n}番 ${fin(n)||'4着以下'}`).join('　');
+  if(!line){line=document.createElement('div');line.className='rx-my';const ft=[...box.children].find(x=>/払戻は100円/.test(x.textContent));box.insertBefore(line,ft||null)}
+  if(line.innerHTML!==html)line.innerHTML=html}
+ let busy=false;
+ const mo=new MutationObserver(()=>{if(busy)return;busy=true;requestAnimationFrame(()=>{try{addChips();addRes()}catch(e){}busy=false})});
+ const go=()=>{const m=document.getElementById('main');if(m)mo.observe(m,{childList:true,subtree:true});try{addChips();addRes()}catch(e){}};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
+})();
+</script>
+
+<script>
+(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261121055217';let neu=false,nv='';
  // 読み直すときは、古い控えを避けるために ?v=新しい版 を付ける。同じ版でもう読み直していたら、自動では読み直さない（知らせだけ出す）
  const go=()=>{location.replace(location.pathname+'?v='+nv+location.hash)};const tried=()=>new URLSearchParams(location.search).get('v')===nv;
  const bar=()=>{if(document.getElementById('upd'))return;const b=document.createElement('button');b.id='upd';b.textContent='新しい内容があります。押すと更新します';
