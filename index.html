@@ -346,6 +346,13 @@ body.mmhide .tr.mymx{display:none!important}
 .rx-my{padding:7px 10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.6;color:#111827}
 .rx-my b{font-weight:800}
 .rx-my .mk{display:inline-block;min-width:18px;font-weight:900}
+
+
+.rx-r:has(.gup){box-shadow:inset 6px 0 0 #2f7d32;background:#f3faf3}
+.rx-r:has(.gdn){box-shadow:inset 6px 0 0 #c62828;background:#fdf3f3}
+.rx-m .gup,.rx-o .gup,.rx-m .gdn,.rx-o .gdn{font-size:21px;font-weight:900;line-height:1;-webkit-text-stroke:1.6px currentColor;paint-order:stroke fill;display:inline-block;vertical-align:-3px;margin:0 2px}
+.rx-m .gup,.rx-o .gup{color:#2f7d32}
+.rx-m .gdn,.rx-o .gdn{color:#c62828}
 </style></head><body>
 <header><div class="t">好走率ナビ</div><div class="s" id="date"></div><div class="tabs" id="tabs"></div><div class="here" id="here"></div><div id="dl" class="dl"></div></header>
 <main id="main"></main>
@@ -986,7 +993,7 @@ let BZOPEN=false;document.addEventListener('toggle',e=>{if(e.target.classList&&e
 </script>
 
 <script>
-(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261121085809';let neu=false,nv='';
+(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261121092359';let neu=false,nv='';
  // 読み直すときは、古い控えを避けるために ?v=新しい版 を付ける。同じ版でもう読み直していたら、自動では読み直さない（知らせだけ出す）
  const go=()=>{location.replace(location.pathname+'?v='+nv+location.hash)};const tried=()=>new URLSearchParams(location.search).get('v')===nv;
  const bar=()=>{if(document.getElementById('upd'))return;const b=document.createElement('button');b.id='upd';b.textContent='新しい内容があります。押すと更新します';
