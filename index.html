@@ -316,27 +316,25 @@ summary{padding:11px 0;min-height:44px}
 .hback{display:block;width:100%;min-height:44px;margin:10px 0 0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
 
 
-.mym{position:relative;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;margin-right:6px;vertical-align:-8px;font-size:18px;font-weight:900;line-height:1;border:2px solid #cbd2dc;color:#9aa3b2;background:#f8fafc;cursor:pointer;flex:none;-webkit-tap-highlight-color:transparent}
-.mym:after{content:'';position:absolute;left:-10px;right:-8px;top:-12px;bottom:-12px}
-.mym:before{content:'印';font-size:12px;font-weight:800}
-.mym:not(.on){display:none}
-body.mmon .mym:not(.on){display:inline-flex}
-.mmt{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 0 8px;padding:10px 12px;border-radius:12px;background:#f3f4f6;font-size:13px;color:#374151}
-.mmt button{flex:none;height:40px;padding:0 16px;border-radius:20px;border:2px solid #111827;background:#fff;color:#111827;font-size:15px;font-weight:800;font-family:inherit}
-body.mmon .mmt{background:#fff7e0}
-body.mmon .mmt button{background:#111827;color:#fff}
-body.mmon .tbl .tr{box-shadow:inset 0 0 0 2px #fde68a}
-.mym.on{border:2px solid #111827;color:#111827;background:#fff}
-.mym.on:before{content:none}
-.mym.on.x{color:#6b7280;border-color:#6b7280}
-.mym.sel{box-shadow:0 0 0 3px #fbbf24}
+.tbl.mymc .th,.tbl.mymc .tr{grid-template-columns:40px 44px 1fr 50px 96px!important}
+@media (max-width:375px){.tbl.mymc .th,.tbl.mymc .tr{grid-template-columns:34px 34px 1fr 58px 94px!important}}
+.tbl.mymc .th .mymh{text-align:center}
+.mymb{align-self:center;justify-self:center;width:38px;height:38px;border-radius:8px;border:1.5px solid #c7cdd6;background:linear-gradient(#fff,#eef1f5);box-shadow:0 1px 2px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#111827;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transparent}
+@media (max-width:375px){.mymb{width:30px;height:30px;font-size:18px}}
+.mymb.k{font-size:16px;color:#6b7280}
+.mymb.sel{box-shadow:0 0 0 3px #fbbf24}
+.tr.mymx{opacity:.45}
+body.mmhide .tr.mymx{display:none!important}
+.mmt{display:flex;align-items:center;gap:8px;margin:6px 0 8px;font-size:14px;color:#374151;font-weight:600}
+.mmt input{width:22px;height:22px;accent-color:#111827}
 .mmp{position:fixed;left:8px;right:8px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:60;background:#fff;border-radius:16px;box-shadow:0 6px 24px rgba(15,23,42,.28);padding:10px 10px 12px;display:none}
 .mmp.open{display:block}
 .mmp .mt{font-size:13px;font-weight:800;color:#374151;margin:0 4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mmp .mb{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.mmp button{height:50px;border-radius:12px;border:2px solid #e5e7eb;background:#f9fafb;font-size:24px;font-weight:900;color:#111827;font-family:inherit}
+.mmp .mb{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.mmp button{height:50px;border-radius:10px;border:2px solid #e5e7eb;background:#f9fafb;font-size:22px;font-weight:900;color:#111827;font-family:inherit;padding:0}
 .mmp button.cur{border-color:#111827;background:#fff}
-.mmp button.clr{font-size:14px;font-weight:800;color:#6b7280}
+.mmp button.k{font-size:17px;color:#6b7280}
+.mmp button.clr{font-size:13px;font-weight:800;color:#6b7280}
 .rx-my{padding:7px 10px;border-top:1px dashed var(--line);font-size:13px;line-height:1.6;color:#111827}
 .rx-my b{font-weight:800}
 .rx-my .mk{display:inline-block;min-width:18px;font-weight:900}
@@ -620,7 +618,7 @@ function card(h){const d=day(),r=d.races.find(x=>String(x.rno)===String(RNO));co
  ${ck&&ck.g?`<div class="blk"><div class="ctl">調教（今回の追い切り）</div><div style="display:flex;align-items:center;margin-top:4px"><span class="g g${ck.g}">${ck.g}</span><div class="reason">${E((ck.rs||[]).join('、'))}</div></div></div>`:''}
  <details><summary>近5走</summary><table>${past||'<tr><td class="sub">記録なし</td></tr>'}</table></details>`}
 function helpView(){return `<div class="help"><h3>好走率ナビが生まれたわけ</h3>競馬でいちばん正確な指標は、人気（オッズ）です。たくさんの人の予想とお金が集まった数字で、過去のデータで確かめても、オッズから見込んだ3着以内の確率はよく当たります。<br><br>好走率ナビは、そのオッズを否定するのではなく、「オッズより正確に確率を出せないか」を、中央競馬の約26万頭（2021年1月〜2026年9月）のデータで研究してきました。その結果、オッズにも見落としやすいところがあると分かりました。たとえば、休み明けの人気馬、前走で圧勝した馬、追い切りの中身、前走の負け方、騎手や厩舎への人気の偏り、当日の馬体重などです。<br><br>その見落としを直したのが「直前好走率」です。作るのに使っていない期間（2025年7月〜2026年9月）で確かめると、オッズだけより3着以内をよく当てました。<b>好走率ナビは、オッズの間違い探しを見える化したものです。</b></div>
- <div class="help"><h3>画面の見方</h3><b>単勝</b>：今のオッズと人気。体重が発表されたら「468kg(+4)」と出ます。<br><b>直前好走率（バーの数字）</b>：オッズから見込んだ確率に、オッズが見落としやすい材料を足して直した、3着以内に来る確率です。<br><b>緑の↑＝オッズの見落とし</b>：オッズは「10回に3回」と見ているのに、ナビは「10回に4回」と見ている、というように、ナビの方が高く見ている馬（差が5%以上）。<br><b>赤の↓＝オッズが期待しすぎ</b>：ナビの方が5%以上低く見ている馬。<br><b>印なし＝オッズどおり</b>。<br><b>オッズでは○%（下の小さい数字）</b>：今のオッズから見込んだ、3着以内に来る確率です。矢印は、上の直前好走率がこの数字より5%以上高いと緑の↑、5%以上低いと赤の↓になります。オッズが出る前は出ません。<br><b>好走率</b>：前日に出した、オッズを使わない確率です。馬を押すと出ます。<br><b>軸</b>：3着以内に来る見込みがいちばん高い馬です。オッズが出る前は好走率の1位、出たあとは直前好走率の1位です。オッズが動くと、軸の馬が入れかわることがあります。多くのレースで1番人気と同じ馬になります。オッズの見落としを示す印ではありません。<br><b>レースの上の大きい数字と★</b>：軸の馬が3着以内に来る見込みです。オッズが出る前は好走率、出たあとは直前好走率で出します。オッズが動くと変わります。<br><b>出走表の並び</b>：人気の高い順です。オッズが出る前は、好走率の高い順に並びます。<br><b>枠有利／枠不利</b>：枠の有利・不利がはっきりしているコースだけ、有利な側の枠（内枠＝1〜2枠、外枠＝7〜8枠）の馬に「枠有利」、反対側の馬に「枠不利」と出します（馬番の下と、馬を押したところ）。8頭以下のレースは、馬番の内側3分の1・外側3分の1で見ます。予想するときの目安です。過去は、有利な枠の馬はオッズの見込みより3着以内が約1%多く、不利な枠の馬は約1%少ない結果でした（1〜3番人気では約4%多い／約3%少ない。中央 2021年1月〜2026年9月）。<br><b>脚質不安（グレーの札）</b>：芝のレースで追込と予想した馬のうち、ふつうなら緑の↑が付く馬です。この形の馬は過去、オッズの見込みとほぼ同じでした（3着以内33.1%、見込み31.4%。中央 2025年7月〜2026年9月、405頭）。そのため緑の↑は付けず、直前好走率も「オッズの見込み+2%」まで下げて出しています。芝で追込と予想した馬は、札がなくても、直前好走率を「オッズの見込み+2%」までにしています。<br><b>自分の印</b>：出走表の上の「印をつける」を押すと、馬を押すたびに画面の下に ◎ ○ ▲ △ ✕ が出て、選んだ印が付きます（「消す」で外せます）。付け終わったら「終わる」を押すと、馬を押したときに今までどおり詳しい画面が開きます。印はこの端末の中だけに保存され、ほかの人には見えません（機種やブラウザを変えると消えます）。レースが終わると、「このレースの結果」に自分の印の馬の着順が出ます。<br><br><b>印の読み方</b>：最後の答えは、直前好走率の数字と矢印（緑の↑、赤の↓）です。馬番の下の四角い「有利」（緑）「不利」（赤）は、コースと枠・脚質から見た予想の目安です。同じ馬に「有利」と赤の↓、「不利」と緑の↑が並ぶことがあります。「有利だが、それ以上に人気が集まっている」「不利だが、それでもオッズの見込みよりは高い」という意味です。<br><b>札</b>：なぜずれているかの手がかりです（下の「札の意味」）。<br>馬を押すと、「オッズの見方 10回に○回」「ナビの見方 10回に○回」が並んで出ます。</div>
+ <div class="help"><h3>画面の見方</h3><b>単勝</b>：今のオッズと人気。体重が発表されたら「468kg(+4)」と出ます。<br><b>直前好走率（バーの数字）</b>：オッズから見込んだ確率に、オッズが見落としやすい材料を足して直した、3着以内に来る確率です。<br><b>緑の↑＝オッズの見落とし</b>：オッズは「10回に3回」と見ているのに、ナビは「10回に4回」と見ている、というように、ナビの方が高く見ている馬（差が5%以上）。<br><b>赤の↓＝オッズが期待しすぎ</b>：ナビの方が5%以上低く見ている馬。<br><b>印なし＝オッズどおり</b>。<br><b>オッズでは○%（下の小さい数字）</b>：今のオッズから見込んだ、3着以内に来る確率です。矢印は、上の直前好走率がこの数字より5%以上高いと緑の↑、5%以上低いと赤の↓になります。オッズが出る前は出ません。<br><b>好走率</b>：前日に出した、オッズを使わない確率です。馬を押すと出ます。<br><b>軸</b>：3着以内に来る見込みがいちばん高い馬です。オッズが出る前は好走率の1位、出たあとは直前好走率の1位です。オッズが動くと、軸の馬が入れかわることがあります。多くのレースで1番人気と同じ馬になります。オッズの見落としを示す印ではありません。<br><b>レースの上の大きい数字と★</b>：軸の馬が3着以内に来る見込みです。オッズが出る前は好走率、出たあとは直前好走率で出します。オッズが動くと変わります。<br><b>出走表の並び</b>：人気の高い順です。オッズが出る前は、好走率の高い順に並びます。<br><b>枠有利／枠不利</b>：枠の有利・不利がはっきりしているコースだけ、有利な側の枠（内枠＝1〜2枠、外枠＝7〜8枠）の馬に「枠有利」、反対側の馬に「枠不利」と出します（馬番の下と、馬を押したところ）。8頭以下のレースは、馬番の内側3分の1・外側3分の1で見ます。予想するときの目安です。過去は、有利な枠の馬はオッズの見込みより3着以内が約1%多く、不利な枠の馬は約1%少ない結果でした（1〜3番人気では約4%多い／約3%少ない。中央 2021年1月〜2026年9月）。<br><b>脚質不安（グレーの札）</b>：芝のレースで追込と予想した馬のうち、ふつうなら緑の↑が付く馬です。この形の馬は過去、オッズの見込みとほぼ同じでした（3着以内33.1%、見込み31.4%。中央 2025年7月〜2026年9月、405頭）。そのため緑の↑は付けず、直前好走率も「オッズの見込み+2%」まで下げて出しています。芝で追込と予想した馬は、札がなくても、直前好走率を「オッズの見込み+2%」までにしています。<br><b>自分の印</b>：出走表の「印」の列の四角を押すと、画面の下に ◎ ○ ▲ △ ☆ 消 が出て、選んだ印が付きます（「外す」で消せます）。出走表の上の「「消」の馬を隠す」を押すと、「消」を付けた馬が見えなくなります。印はこの端末の中だけに保存され、ほかの人には見えません（機種やブラウザを変えると消えます）。レースが終わると、「このレースの結果」に自分の印の馬の着順が出ます。<br><br><b>印の読み方</b>：最後の答えは、直前好走率の数字と矢印（緑の↑、赤の↓）です。馬番の下の四角い「有利」（緑）「不利」（赤）は、コースと枠・脚質から見た予想の目安です。同じ馬に「有利」と赤の↓、「不利」と緑の↑が並ぶことがあります。「有利だが、それ以上に人気が集まっている」「不利だが、それでもオッズの見込みよりは高い」という意味です。<br><b>札</b>：なぜずれているかの手がかりです（下の「札の意味」）。<br>馬を押すと、「オッズの見方 10回に○回」「ナビの見方 10回に○回」が並んで出ます。</div>
  <div class="help"><h3>間違い探しのコツ（中央 2025年7月〜2026年9月の結果）</h3>1. <b>軸</b>は、★と、見込みがいちばん高い馬（オッズが出る前は好走率の1位、出たあとは直前好走率の1位）。★が多いほど、軸が3着以内に来る見込みが高いレースです。<br>2. <b>相手</b>は、緑の↑（オッズの見落とし）の馬を先に、あとは直前好走率の高い順（レースのページの「相手の探し方」）。過去は、人気順で選ぶより、当たる割合は同じくらいで、払戻の効率が高い形でした（相手3頭のワイドで回収率85.5%、人気順は81.9%）。★3以上の軸に、緑の↑（オッズの見落とし）の馬を組み合わせると、赤の↓の馬より3着以内に来ることが多く、ワイドの回収率も高い形でした（中央 2025年7月〜2026年9月、軸と相手1頭のワイド：緑↑ 95%／赤↓ 69%）。<br>3. オッズの見落とし（緑の↑）の馬は、オッズから見込まれるより3着以内に来ることが多い形でした（見込み34.1% → 実際40.1%）。それでも来ないことのほうが多く、買えば得という意味ではありません。未勝利戦で特にはっきりしていました。<br>4. 人気馬（1〜3番人気）に、オッズが期待しすぎ（赤の↓）と「休み明け」か「調教D」が重なったら、人気ほどは来ていない形でした（実際40.6%、見込み49.7%）。<br>5. ↑も↓もない馬は、オッズどおりと見ています（見込み14.5% → 実際14.4%）。<div class="sub">どの選び方も、回収率は100%を下回っています。好走率ナビは当たりや儲けを約束するものではありません。オッズの間違いがどこにありそうかを示すもので、選ぶのはご自身です。数字は最終オッズで確かめたもので、発走のだいぶ前のオッズで同じかは確かめているところです。</div></div>
  <div class="help"><h3>札の意味（中央 2022年1月〜2026年9月の結果）</h3>${['◉鉄板','◎軸馬','穴馬候補','大穴候補','人気先行'].map(f=>`<div style="margin:4px 0"><span class="fd ${FC[f]}">${f}</span>${FD[f]}</div>`).join('')}<div style="margin:8px 0 2px;font-weight:700">馬の札（緑＝オッズより来やすい形、赤＝来にくい形。中央 2021年1月〜2026年9月）</div>${Object.keys(TD).map(k=>`<div style="margin:4px 0"><span class="${k==='直前上昇'?'fd f-rise':k==='馬場が味方'?'fd f-bzp':k==='馬場で不利'?'fd f-bzm':'tg '+(TD[k][0]==='+'?(k==='調教A'?'tg-p tg-pl':'tg-p'):'tg-m')}">${k}</span>${E(TD[k][1])}。${E(TD[k][2])}。</div>`).join('')}<div class="sub">札は、3着以内に来やすいかどうかの目印です。買えば得という意味ではありません（どの札も回収率は100%を下回っています）。</div></div>
  <div class="help"><h3><span class="fd f-furi">前走不利</span>の札</h3>前走で、ほかの馬に斜行された、進路をふさがれた、出遅れた、つまずいた、などの不利があった馬です。JRA公式のレース結果「競走中の出来事等」に書かれている馬だけに付けています。そこに書かれない不利もあるので、札がない馬に不利がなかったとは限りません。<div class="sub">点線の札は、成績で確かめた札ではありません。好走率の数字にも入れていません。不利があった馬が次に巻き返すかは、結果を記録して確かめているところです。</div></div>
@@ -924,52 +922,51 @@ let BZOPEN=false;document.addEventListener('toggle',e=>{if(e.target.classList&&e
 <script>
 /*mymark_post*/
 (function(){
- const KEY='kcnavi_mymark',SEQ=['','◎','○','▲','△','✕'];
+ const KEY='kcnavi_mymark',HKEY='kcnavi_mymark_hide',MARKS=['◎','○','▲','△','☆','消'];
  const D=(ALL[0]&&ALL[0].date)||'';
  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return {}}}
  function save(o){try{const ks=Object.keys(o).sort();while(ks.length>14){delete o[ks.shift()]}localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
  function rk(){const r=day().races.find(x=>String(x.rno)===String(RNO));const ba=r&&(r.ba||(ALL.find(d=>d.races.includes(r))||{}).ba);return r?{r,k:ba+'_'+r.rno}:null}
  function get(k,no){const o=load();return ((o[D]||{})[k]||{})[no]||''}
  function set(k,no,v){const o=load();o[D]=o[D]||{};o[D][k]=o[D][k]||{};if(v)o[D][k][no]=v;else delete o[D][k][no];save(o)}
- function paint(el,v){el.textContent=v;el.classList.toggle('on',!!v);el.classList.toggle('x',v==='✕');el.setAttribute('aria-label',v?'自分の印 '+v:'自分の印をつける')}
- let MODE=false;try{MODE=sessionStorage.getItem('kcnavi_mymode')==='1'}catch(e){}
- function setMode(v){MODE=v;try{sessionStorage.setItem('kcnavi_mymode',v?'1':'')}catch(e){}document.body.classList.toggle('mmon',v);document.querySelectorAll('.mmt').forEach(paintT);if(!v)closePick()}
- function paintT(t){t.querySelector('span').textContent=MODE?'馬を押すと印を付けられます':'自分の印（自分用のメモ）';t.querySelector('button').textContent=MODE?'終わる':'印をつける'}
- function addToggle(){const tb=document.querySelector('.tbl');if(!tb||tb.previousElementSibling&&tb.previousElementSibling.classList.contains('mmt'))return;
-  const t=document.createElement('div');t.className='mmt';t.innerHTML='<span></span><button type="button"></button>';paintT(t);t.querySelector('button').addEventListener('click',ev=>{ev.stopPropagation();setMode(!MODE)});tb.parentNode.insertBefore(t,tb)}
- document.addEventListener('click',ev=>{if(!MODE)return;const tr=ev.target.closest&&ev.target.closest('.tbl .tr[data-n]');if(!tr)return;ev.stopPropagation();ev.preventDefault();const c=rk();if(!c)return;const m=tr.querySelector('.mym');const tn=tr.querySelector('.tn');if(m)openPick(c.k,tr.dataset.n,m,(tn&&tn.childNodes[1]&&tn.childNodes[1].textContent)||'')},true);
- function addChips(){if(!RNO||RNO==='help')return;const c=rk();if(!c)return;addToggle();document.body.classList.toggle('mmon',MODE);
-  document.querySelectorAll('.tbl .tr[data-n]').forEach(e=>{const tn=e.querySelector('.tn');if(!tn||tn.querySelector('.mym'))return;
-   const no=e.dataset.n,m=document.createElement('span');m.className='mym';m.setAttribute('role','button');paint(m,get(c.k,no));
-   const stop=ev=>{ev.stopPropagation();ev.preventDefault()};
-   m.addEventListener('pointerdown',ev=>ev.stopPropagation());
-   m.addEventListener('click',ev=>{stop(ev);openPick(c.k,no,m,(tn.childNodes[1]&&tn.childNodes[1].textContent)||'')},true);
-   tn.insertBefore(m,tn.firstChild)})}
+ let HIDE=false;try{HIDE=localStorage.getItem(HKEY)==='1'}catch(e){}
+ function paint(b,v){b.textContent=v;b.classList.toggle('k',v==='消');b.setAttribute('aria-label',v?'自分の印 '+v:'自分の印をつける');const tr=b.closest('.tr');if(tr)tr.classList.toggle('mymx',v==='消')}
  let pk=null;
- function pick(){if(pk)return pk;pk=document.createElement('div');pk.className='mmp';pk.innerHTML='<div class="mt"></div><div class="mb">'+SEQ.slice(1).map(v=>`<button type="button" data-v="${v}">${v}</button>`).join('')+'<button type="button" class="clr" data-v="">消す</button></div>';
-  document.body.appendChild(pk);pk.addEventListener('click',ev=>{const t=ev.target.closest('button');ev.stopPropagation();if(!t||!pk._k)return;set(pk._k,pk._no,t.dataset.v);paint(pk._m,t.dataset.v);closePick();addRes()});
-  document.addEventListener('click',ev=>{if(pk.classList.contains('open')&&!ev.target.closest('.mmp')&&!ev.target.closest('.mym')&&!(MODE&&ev.target.closest('.tbl .tr[data-n]'))&&!ev.target.closest('.mmt'))closePick()},true);return pk}
- function openPick(k,no,m,name){const p=pick();if(p._m)p._m.classList.remove('sel');p._k=k;p._no=no;p._m=m;m.classList.add('sel');p.querySelector('.mt').textContent=no+'番 '+name.trim()+' に自分の印';
-  const cur=get(k,no);p.querySelectorAll('button').forEach(b=>b.classList.toggle('cur',b.dataset.v===cur&&!!cur));p.classList.add('open')}
- function closePick(){if(!pk)return;pk.classList.remove('open');if(pk._m)pk._m.classList.remove('sel');pk._k=null}
+ function pick(){if(pk)return pk;pk=document.createElement('div');pk.className='mmp';
+  pk.innerHTML='<div class="mt"></div><div class="mb">'+MARKS.map(v=>`<button type="button" data-v="${v}" class="${v==='消'?'k':''}">${v}</button>`).join('')+'<button type="button" class="clr" data-v="">外す</button></div>';
+  document.body.appendChild(pk);
+  pk.addEventListener('click',ev=>{const t=ev.target.closest('button');ev.stopPropagation();if(!t||!pk._k)return;set(pk._k,pk._no,t.dataset.v);paint(pk._b,t.dataset.v);closePick();addRes()});
+  document.addEventListener('click',ev=>{if(pk.classList.contains('open')&&!ev.target.closest('.mmp')&&!ev.target.closest('.mymb'))closePick()},true);return pk}
+ function openPick(k,no,b,name){const p=pick();if(p._b)p._b.classList.remove('sel');p._k=k;p._no=no;p._b=b;b.classList.add('sel');p.querySelector('.mt').textContent=no+'番 '+name+' に自分の印';
+  const cur=get(k,no);p.querySelectorAll('button').forEach(x=>x.classList.toggle('cur',!!cur&&x.dataset.v===cur));p.classList.add('open')}
+ function closePick(){if(!pk)return;pk.classList.remove('open');if(pk._b)pk._b.classList.remove('sel');pk._k=null}
+ function addCol(){if(!RNO||RNO==='help')return;const c=rk();if(!c)return;const tb=document.querySelector('.tbl');if(!tb)return;
+  document.body.classList.toggle('mmhide',HIDE);
+  if(!tb.classList.contains('mymc')){tb.classList.add('mymc');const th=tb.querySelector('.th');if(th&&!th.querySelector('.mymh')){const h=document.createElement('span');h.className='mymh';h.textContent='印';th.insertBefore(h,th.children[1]||null)}}
+  if(!(tb.previousElementSibling&&tb.previousElementSibling.classList.contains('mmt'))){const t=document.createElement('label');t.className='mmt';t.innerHTML='<input type="checkbox"><span>「消」の馬を隠す</span>';const cb=t.querySelector('input');cb.checked=HIDE;
+   cb.addEventListener('change',()=>{HIDE=cb.checked;try{localStorage.setItem(HKEY,HIDE?'1':'')}catch(e){}document.body.classList.toggle('mmhide',HIDE)});tb.parentNode.insertBefore(t,tb)}
+  tb.querySelectorAll('.tr[data-n]').forEach(e=>{if(e.querySelector('.mymb'))return;const no=e.dataset.n;const b=document.createElement('span');b.className='mymb';b.setAttribute('role','button');
+   e.insertBefore(b,e.children[1]||null);paint(b,get(c.k,no));
+   const tn=e.querySelector('.tn');const name=tn?[...tn.childNodes].filter(x=>x.nodeType===3).map(x=>x.textContent).join('').trim():'';
+   b.addEventListener('pointerdown',ev=>ev.stopPropagation());
+   b.addEventListener('click',ev=>{ev.stopPropagation();ev.preventDefault();openPick(c.k,no,b,name)},true)})}
  function addRes(){if(!RNO||RNO==='help')return;const c=rk();if(!c)return;
   const h=[...document.querySelectorAll('.rx-h')][0];if(!h)return;const box=h.parentElement;let line=box.querySelector('.rx-my');
-  const o=(load()[D]||{})[c.k]||{};const nos=Object.keys(o).filter(n=>o[n]&&o[n]!=='✕').sort((a,b)=>SEQ.indexOf(o[a])-SEQ.indexOf(o[b])||a-b);
+  const o=(load()[D]||{})[c.k]||{};const nos=Object.keys(o).filter(n=>o[n]&&o[n]!=='消').sort((a,b)=>MARKS.indexOf(o[a])-MARKS.indexOf(o[b])||a-b);
   if(!nos.length){if(line)line.remove();return}
-  const R=(typeof window.__kcRes==='function')?window.__kcRes(c.r):null;
   const fin=no=>{const t=[...box.querySelectorAll('.rx-r')].find(x=>{const n=x.querySelector('.nn');return n&&n.textContent.trim()===String(no)});if(t)return (t.querySelector('.rx-f')||{}).textContent||'';const m=box.textContent.match(new RegExp('(^|[^0-9])'+no+'番\\s*([0-9]+)着'));return m?m[2]+'着':''};
   const html='<b>自分の印</b>：'+nos.map(n=>`<span class="mk">${o[n]}</span>${n}番 ${fin(n)||'4着以下'}`).join('　');
   if(!line){line=document.createElement('div');line.className='rx-my';const ft=[...box.children].find(x=>/払戻は100円/.test(x.textContent));box.insertBefore(line,ft||null)}
   if(line.innerHTML!==html)line.innerHTML=html}
  let busy=false;
- const mo=new MutationObserver(()=>{if(busy)return;busy=true;requestAnimationFrame(()=>{try{addChips();addRes()}catch(e){}busy=false})});
- const go=()=>{const m=document.getElementById('main');if(m)mo.observe(m,{childList:true,subtree:true});try{addChips();addRes()}catch(e){}};
+ const mo=new MutationObserver(()=>{if(busy)return;busy=true;requestAnimationFrame(()=>{try{addCol();addRes()}catch(e){}busy=false})});
+ const go=()=>{const m=document.getElementById('main');if(m)mo.observe(m,{childList:true,subtree:true});try{addCol();addRes()}catch(e){}};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 })();
 </script>
 
 <script>
-(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261121061320';let neu=false,nv='';
+(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261121061816';let neu=false,nv='';
  // 読み直すときは、古い控えを避けるために ?v=新しい版 を付ける。同じ版でもう読み直していたら、自動では読み直さない（知らせだけ出す）
  const go=()=>{location.replace(location.pathname+'?v='+nv+location.hash)};const tried=()=>new URLSearchParams(location.search).get('v')===nv;
  const bar=()=>{if(document.getElementById('upd'))return;const b=document.createElement('button');b.id='upd';b.textContent='新しい内容があります。押すと更新します';
