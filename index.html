@@ -353,7 +353,7 @@ body.mmhide .tr.mymx{display:none!important}
 .rx-m .gup,.rx-o .gup,.rx-m .gdn,.rx-o .gdn{font-size:21px;font-weight:900;line-height:1;-webkit-text-stroke:1.6px currentColor;paint-order:stroke fill;display:inline-block;vertical-align:-3px;margin:0 2px}
 .rx-m .gup,.rx-o .gup{color:#2f7d32}
 .rx-m .gdn,.rx-o .gdn{color:#c62828}
-.tpa{margin:10px 0;padding:10px 12px;border:1.5px solid #2f7d32;border-radius:10px;background:#f6fbf6}.tpa-h{font-weight:800;font-size:15px;margin-bottom:6px}.tpa-r{margin:6px 0;font-size:14px;line-height:1.6}.tpa-r .sub{font-size:12px}.tpa-f{margin-top:6px;font-size:11.5px}</style></head><body>
+.tpa{margin:10px 0;padding:10px 12px;border:1.5px solid #2f7d32;border-radius:10px;background:#f6fbf6}.tpa-h{font-weight:800;font-size:15px;margin-bottom:6px}.tpa-r{margin:6px 0;font-size:14px;line-height:1.6}.tpa-r .sub{font-size:12px}.tpa-f{margin-top:6px;font-size:11.5px}.tpb{border-color:#5c6b7a;background:#f6f8fa}</style></head><body>
 <header><div class="t">好走率ナビ</div><div class="s" id="date"></div><div class="tabs" id="tabs"></div><div class="here" id="here"></div><div id="dl" class="dl"></div></header>
 <main id="main"></main>
 <div class="sheet" id="sheet"><div class="sh" id="sh"></div></div>
@@ -594,6 +594,18 @@ function teppanAdvice(r,top){if(!top||r.course==='障害'||r.cls===0||live(r).le
  <div class="tpa-r"><b>相手も買うなら</b>：<b>ワイド</b> ${hs.map(x=>`${nb(top)}−${nb(x.h)}`).join('・')}<div class="sub">赤の↓は外し、緑の↑を先に、あとは直前好走率の高い順。過去の的中は約8割（3点のどれかが当たる割合）</div></div>
  <div class="tpa-r"><b>3連複なら</b>：${nb(top)}−${hs.map(x=>nb(x.h)).join('')}（3点）<div class="sub">過去の的中は約3割</div></div>
  <div class="sub tpa-f">過去＝2025年7月〜2026年8月、軸が直前好走率80%以上の369レース（確定オッズ）。オッズが動くと買い目が変わります。当たりや払戻を約束するものではありません。</div></div>`}
+function typeAdvice(r,top){if(!top||r.course==='障害'||r.cls===0||live(r).length<8)return '';
+ const L=live(r).map(h=>({h,p:todayP(r,h),e:oddsP(r,h)}));if(L.some(x=>x.p==null||x.e==null))return '';
+ const ps=L.map(x=>x.p).sort((a,b)=>b-a);const [a,b,c]=ps;let T='';
+ if(a>=.8)T='鉄板級';else if(a>=.6&&a-b>=.15)T='1強';else if(b>=.55&&b-c>=.1&&a-b<.15)T='2強';else if(c>=.4&&a-c<.15)T='三つどもえ';else if(a<.45)T='混戦';else T='その他';
+ if(T!=='その他'&&T!=='三つどもえ')return '';
+ const hs=L.filter(x=>x.h!==top&&gapP(x.p,x.e)>-3).sort((x,y)=>y.p-x.p).slice(0,3);if(hs.length<3)return '';
+ const nb=h=>`<span class="nn w${h.waku}">${h.no}</span>`;const nm=T==='三つどもえ'?'上位3頭が接戦のレース':'上位がやや抜けているレース';
+ return `<div class="tpa tpb"><div class="tpa-h">${nm}の買い方</div>
+ <div class="tpa-r">このタイプのレースは、<b>来ない馬を消す</b>方が当たりやすい形です。赤の↓と、オッズより3%以上低く見ている馬は外します。緑の↑は、ほかのタイプより弱めです。</div>
+ <div class="tpa-r"><b>買うなら</b>：<b>ワイド</b> ${nb(top)}−${nb(hs[0].h)}・${nb(top)}−${nb(hs[1].h)}（2点）<div class="sub">軸から、外した残りの直前好走率の高い順に2頭。過去の的中は約4割弱（2点のどれかが当たる割合）</div></div>
+ <div class="tpa-r"><b>広げるなら</b>：${nb(top)}−${nb(hs[2].h)} も足して3点<div class="sub">過去の的中は約4割</div></div>
+ <div class="sub tpa-f">過去＝2025年7月〜2026年8月、このタイプの1,449レース（確定オッズ）。オッズが動くと買い目が変わります。当たりや払戻を約束するものではありません。</div></div>`}
 function partnerView(r,top){if(!top)return '';const hs=live(r).filter(h=>h!==top);const hasO=hs.some(h=>todayP(r,h)!=null);
  const L=hasO?hs.map(h=>{const t=todayP(r,h),e=oddsP(r,h);return {h,t:t==null?0:t,g:(t!=null&&e!=null)?gapP(t,e)/100:0}}).sort((a,b)=>((b.g>=.05)-(a.g>=.05))||(b.t-a.t)):hs.map(h=>({h,t:h.p,g:0})).sort((a,b)=>b.t-a.t);
  const T5=L.slice(0,5),RL=noGreen(r,top)?riseList(r,top):[];
@@ -611,7 +623,7 @@ function raceView(){const d=day(),r=d.races.find(x=>String(x.rno)===String(RNO))
  return `${chips}${nav}<div class="rc${r.cls>=6?' rcg rcg'+r.cls:''}"><div class="rt rth"><b class="rnb">${E(d.ba)}${r.rno}R</b><span>${E(r.time)}発走　${E(r.course)}${E(r.dist)}m　${hs.length}頭</span></div><div class="rtitle">${r.cls>=6?`<span class="grd g${r.cls}">${['G3','G2','G1'][r.cls-6]}</span>`:''}${E(r.name)}</div>${resultView(r,top)}
  <div class="conf ${n===5?'s5':n===4?'s4':''}"><b>軸の信頼度</b>　<span class="stars">${st(n)}</span>${top?cfRing(top,n):''}</div>
  ${feat(r)}
- ${teppanAdvice(r,top)}${partnerView(r,top)}
+ ${teppanAdvice(r,top)}${typeAdvice(r,top)}${partnerView(r,top)}
  <div class="srtn">${hs.some(h=>odOf(h))?'人気順（'+odAt()+'のオッズ）':'好走率の高い順（オッズが出る前）'}</div>
  <div class="tbl"><div class="th"><span>番</span><span>馬名</span><span class="r">単勝</span><span class="r">${hs.some(h=>todayP(r,h)!=null)?'直前好走率':'好走率'}</span></div>${sorted(hs).map(h=>{const m=M[h.no],g=h.ck2&&h.ck2.g;return `<button class="tr" data-n="${h.no}"><span class="nn w${h.waku}">${h.no}</span><span class="tn">${E(h.name)}<span class="tj">${E(h.jockey)}${h.kin?'・'+(+h.kin).toFixed(1)+'kg':''}</span><span class="tb">${RL.indexOf(h)>=0?'<span class="fd f-rise">直前上昇</span>':''}${BZ[h.no]?`<span class="fd ${BZ[h.no]==='馬場が味方'?'f-bzp':'f-bzm'}">${BZ[h.no]}</span>`:''}${m?`<span class="fd ${FC[m]}">${m}</span>`:''}${furiOf(r,h)?'<span class="fd f-furi">前走不利</span>':''}${tagChips(r,h,(RL.indexOf(h)>=0?1:0)+(BZ[h.no]?1:0)+(m?1:0)+(furiOf(r,h)?1:0),(RL.indexOf(h)>=0?4:0)+(BZ[h.no]?5:0)+(m?m.length:0)+(furiOf(r,h)?4:0))}</span></span>${(o=>`<span class="tod">${o?`<b>${fmtOd(o.odds)}</b><small>${o.pop}番人気</small>`:''}${(w=>w[0]?`<small class="twt">${Math.round(w[0])}kg${w[1]==null?'':'('+(w[1]>0?'+'+w[1]:w[1]<0?'−'+(-w[1]):'±0')+')'}</small>`:'')(wtOf(r,h))}</span>`)(odOf(h))}<span class="tpx">${(()=>{const t=todayP(r,h),P0=pc(h.p),eo=oddsP(r,h);const T=t==null?null:Math.round(t*100),d=(t==null||eo==null)?0:gapP(t,eo),sh=t!=null&&eo!=null&&Math.abs(d)>=5,cl=d>0?'up':'dn';
  const V=T==null?P0:T,rz=RL.indexOf(h)>=0;return `<span class="bar sw${rz?' rise':''}"><i style="width:${V}%"></i><b class="${sh?cl:''}">${sh?`<small class="ar">${d>0?'↑':'↓'}</small>`:''}${V}<small>%</small></b></span><em class="base">${T==null?'':(()=>{const o=oddsP(r,h);return o==null?`<small>好走率</small>${P0}<small>%</small>`:`<small>オッズでは</small>${Math.round(o*100)}<small>%</small>`})()}</em>`})()}</span></button>`}).join('')}</div>
@@ -1001,7 +1013,7 @@ let BZOPEN=false;document.addEventListener('toggle',e=>{if(e.target.classList&&e
 </script>
 
 <script>
-(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261123045528';let neu=false,nv='';
+(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261123050427';let neu=false,nv='';
  // 読み直すときは、古い控えを避けるために ?v=新しい版 を付ける。同じ版でもう読み直していたら、自動では読み直さない（知らせだけ出す）
  const go=()=>{location.replace(location.pathname+'?v='+nv+location.hash)};const tried=()=>new URLSearchParams(location.search).get('v')===nv;
  const bar=()=>{if(document.getElementById('upd'))return;const b=document.createElement('button');b.id='upd';b.textContent='新しい内容があります。押すと更新します';
