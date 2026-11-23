@@ -598,7 +598,7 @@ function typeAdvice(r,top){if(!top||r.course==='障害'||r.cls===0||live(r).leng
  const L=live(r).map(h=>({h,p:todayP(r,h),e:oddsP(r,h)}));if(L.some(x=>x.p==null||x.e==null))return '';
  const ps=L.map(x=>x.p).sort((a,b)=>b-a);const [a,b,c]=ps;let T='';
  if(a>=.8)T='鉄板級';else if(a>=.6&&a-b>=.15)T='1強';else if(b>=.55&&b-c>=.1&&a-b<.15)T='2強';else if(c>=.4&&a-c<.15)T='三つどもえ';else if(a<.45)T='混戦';else T='その他';
- if(T!=='その他'&&T!=='三つどもえ')return '';
+ if(T!=='その他'&&T!=='三つどもえ')return '';const tx=L.find(x=>x.h===top);if(tx&&gapP(tx.p,tx.e)<=-5)return `<div class="tpa tpb"><div class="tpa-h">${T==='三つどもえ'?'上位3頭が接戦のレース':'上位がやや抜けているレース'}の買い方</div><div class="tpa-r">直前好走率1位の${top.no}番を、オッズより低く見ています（赤の↓）。このレースでは、このタイプの買い方は出しません。</div></div>`;
  const hs=L.filter(x=>x.h!==top&&gapP(x.p,x.e)>-3).sort((x,y)=>y.p-x.p).slice(0,3);if(hs.length<3)return '';
  const nb=h=>`<span class="nn w${h.waku}">${h.no}</span>`;const nm=T==='三つどもえ'?'上位3頭が接戦のレース':'上位がやや抜けているレース';
  return `<div class="tpa tpb"><div class="tpa-h">${nm}の買い方</div>
