@@ -538,7 +538,8 @@ function tpmCalc(TPM,key,odds,allOdds,wt,wtd,raceWts){const F=TPM.f[key];if(!F||
  let s=base;for(const t of (useW?TPM.m2:TPM.m))s+=tpmTree(t,x);return 1/(1+Math.exp(-s))}
 if(typeof module!=='undefined')module.exports={tpmCalc,tpmTree,tpmWt};
 
-function oddsP(r,h){const n=odOf(h);if(!n||!TPM)return null;const al=[];for(const x of live(r)){const m=odOf(x);if(m&&m.odds)al.push(+m.odds)}if(al.length<5)return null;let S=0;for(const o of al)S+=1/o;const c=al.length,q=(1/n.odds)/S,lq=Math.log(q/(1-q)),ln=Math.log(c),k=TPM.k;return 1/(1+Math.exp(-(k[0]*lq+k[1]*ln+k[2]*lq*ln+k[3])))}
+const _onC={};function oddsP(r,h){const L=live(r);const key=(RBA.get(r)||'')+'_'+r.rno+'_'+L.map(x=>{const m=odOf(x);return m?m.odds:''}).join(',');let c=_onC[key];if(!c){let S=0,n=0;for(const x of L){const v=oddsP0(r,x);if(v!=null){S+=v;n++}}c=_onC[key]={f:(n>=5&&S>0)?3/S:1}}const v=oddsP0(r,h);return v==null?null:Math.min(v*c.f,0.995)}
+function oddsP0(r,h){const n=odOf(h);if(!n||!TPM)return null;const al=[];for(const x of live(r)){const m=odOf(x);if(m&&m.odds)al.push(+m.odds)}if(al.length<5)return null;let S=0;for(const o of al)S+=1/o;const c=al.length,q=(1/n.odds)/S,lq=Math.log(q/(1-q)),ln=Math.log(c),k=TPM.k;return 1/(1+Math.exp(-(k[0]*lq+k[1]*ln+k[2]*lq*ln+k[3])))}
 function gapP(t,e){return Math.round(t*100)-Math.round(e*100)}
 function noGreen(r,top){let any=false;for(const x of live(r)){if(x===top)continue;const t=todayP(r,x),e=oddsP(r,x);if(t==null||e==null)continue;any=true;if(gapP(t,e)>=5)return false}return any}
 function riseList(r,top){if(r.course==='障害')return [];const a=[];for(const h of live(r)){if(h===top)continue;const t=todayP(r,h),e=oddsP(r,h);if(t==null||e==null||Math.abs(gapP(t,e))>=5)continue;const d=Math.round(t*100)-pc(h.p);if(d>0)a.push([h,d,t,Math.round(t*100)-Math.round(e*100)])}return a.sort((x,y)=>(y[1]-x[1])||(y[2]-x[2])).slice(0,3).filter(x=>x[3]>=1).map(x=>x[0])}
@@ -1019,9 +1020,9 @@ function biasBox(d){const A=[['芝','芝'],['ダ','ダート']].map(([tf,nm])=>[
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go();
 })();
 </script>
-<script>document.addEventListener('click',e=>{const h=e.target.closest('.help.fold');if(!h)return;if(h.classList.contains('open')&&!e.target.closest('h3'))return;h.classList.toggle('open')})</script>
+<script>document.addEventListener('click',e=>{const h=e.target.closest('.help.fold');if(!h)return;if(h.classList.contains('open')&&!e.target.closest('h3'))return;h.classList.toggle('open')})</script><script>(function(){const _t=todayP;const C={};todayP=function(r,h){const L=live(r);const key=(RBA.get(r)||'')+'_'+r.rno+'_'+RNO+'_'+L.map(x=>{const m=odOf(x);const w=wtOf(r,x);return (m?m.odds:'')+'/'+(w&&w[0]||'')}).join(',');let c=C[key];if(!c){let S=0,n=0;for(const x of L){const v=_t(r,x);if(v!=null){S+=v;n++}}c=C[key]={f:(n>=5&&S>0)?3/S:1}}const v=_t(r,h);return v==null?null:Math.min(v*c.f,0.995)}})()</script>
 <script>
-(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261128061821';let neu=false,nv='';
+(function(){if(window.claude||location.protocol==='file:')return;const BUILD='20261128063723';let neu=false,nv='';
  // 読み直すときは、古い控えを避けるために ?v=新しい版 を付ける。同じ版でもう読み直していたら、自動では読み直さない（知らせだけ出す）
  const go=()=>{location.replace(location.pathname+'?v='+nv+location.hash)};const tried=()=>new URLSearchParams(location.search).get('v')===nv;
  const bar=()=>{if(document.getElementById('upd'))return;const b=document.createElement('button');b.id='upd';b.textContent='新しい内容があります。押すと更新します';
